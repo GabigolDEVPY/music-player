@@ -86,7 +86,7 @@ class PlayerControl(QWidget):
         # Barra de progresso
         progress_layout = QHBoxLayout()
         
-        self.time_current = QLabel("1:23")
+        self.time_current = QLabel("00:00")
         self.time_current.setStyleSheet("color: #b3b3b3; font-size: 9px;")
         
         self.music_player = QMediaPlayer()
@@ -114,12 +114,12 @@ class PlayerControl(QWidget):
         """)
         progress_slider.setValue(40)
         
-        time_total = QLabel("3:20")
-        time_total.setStyleSheet("color: #b3b3b3; font-size: 9px;")
+        self.time_total = QLabel()
+        self.time_total.setStyleSheet("color: #b3b3b3; font-size: 9px;")
         
         progress_layout.addWidget(self.time_current)
         progress_layout.addWidget(progress_slider, 1)
-        progress_layout.addWidget(time_total)
+        progress_layout.addWidget(self.time_total)
         
         # Controles de playback com ícones profissionais
         controls_layout = QHBoxLayout()

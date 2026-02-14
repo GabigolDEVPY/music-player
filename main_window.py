@@ -15,6 +15,7 @@ class MainController(SpotifyInterface):
 
         # player control
         self.player_control = PlayerController(self.player)
+        
         # change status player/pause button
         self.player.play_btn.clicked.connect(self.player_control.change_status_play)
 
@@ -26,8 +27,11 @@ class MainController(SpotifyInterface):
         # panel controller
         self.panel_controller = PanelController(self.stacked_panel, self.library_controller)
         self.panel_controller.change_panel(0)
+        
         #Change pannel music youtube/local 
         self.search_bar.tabs.currentChanged.connect(self.panel_controller.change_panel)
 
+        # select folder path
+        self.library_panel.button_local.clicked.connect(self.library_controller.change_local_path)
 
 

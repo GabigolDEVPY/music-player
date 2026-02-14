@@ -31,3 +31,4 @@ class PlayerController:
         self.player.song_title.setText(music_data["title"])
         self.player.artist_name.setText(music_data["artist"])
         self.player.album_icon.setPixmap(music_data["icon"])
+        self.player.time_total.setText(music_data["duration"])

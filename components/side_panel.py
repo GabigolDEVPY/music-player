@@ -108,7 +108,6 @@ class SidePanel(QWidget):
             }
             QPushButton:hover {
                 background-color: #1ed760;
-                transform: scale(1.02);
             }
             QPushButton:pressed {
                 background-color: #169c46;
