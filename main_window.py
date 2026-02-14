@@ -1,6 +1,8 @@
 from components.interface import SpotifyInterface
 from controllers.Panel_controller import PanelController
-from controllers.PlayerController import PlayerController
+from controllers.Player_controller import PlayerController
+from controllers.Library_controller import LibraryController
+
 from pathlib import Path
 from PySide6.QtCore import QUrl
 
@@ -17,8 +19,12 @@ class MainController(SpotifyInterface):
         self.player.play_btn.clicked.connect(self.player_control.change_status_play)
 
 
+        # library controller
+        self.library_controller = LibraryController(self.library_panel, self.youtube_panel, self.player_control)
+
+
         # panel controller
-        self.panel_controller = PanelController(self.stacked_panel, self.youtube_panel, self.library_panel, self.player_control)
+        self.panel_controller = PanelController(self.stacked_panel, self.library_controller)
         self.panel_controller.change_panel(0)
         #Change pannel music youtube/local 
         self.search_bar.tabs.currentChanged.connect(self.panel_controller.change_panel)

@@ -11,7 +11,6 @@ from main_window import MainController
 
 def main():
     app = QApplication(sys.argv)
-    # Configurar fonte padrão
     app.setFont(QFont("Segoe UI", 10))
     window = MainController()
     window.show()

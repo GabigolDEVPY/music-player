@@ -59,7 +59,7 @@ class SidePanel(QWidget):
         """)
         
         # Container das músicas
-        music_container = QWidget()
+        self.music_container = QWidget()
         self.music_layout = QVBoxLayout()
         self.music_layout.setContentsMargins(8, 8, 8, 8)
         self.music_layout.setAlignment(Qt.AlignTop)
@@ -67,8 +67,8 @@ class SidePanel(QWidget):
         # Adicionar músicas exemplo
 
         
-        music_container.setLayout(self.music_layout)
-        scroll.setWidget(music_container)
+        self.music_container.setLayout(self.music_layout)
+        scroll.setWidget(self.music_container)
         
         layout.addWidget(header_container)
         layout.addWidget(scroll)
