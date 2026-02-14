@@ -114,6 +114,10 @@ class MusicCard(QFrame):
         layout.addWidget(download_btn)
         self.setLayout(layout)
         
+        #deixar fundos transparentes
+        title_label.setAttribute(Qt.WA_TranslucentBackground)
+        artist_label.setAttribute(Qt.WA_TranslucentBackground)
+        duration_label.setAttribute(Qt.WA_TranslucentBackground)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:

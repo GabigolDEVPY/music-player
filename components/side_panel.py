@@ -63,14 +63,63 @@ class SidePanel(QWidget):
         self.music_layout = QVBoxLayout()
         self.music_layout.setContentsMargins(8, 8, 8, 8)
         self.music_layout.setAlignment(Qt.AlignTop)
-        
-        # Adicionar músicas exemplo
-
-        
         self.music_container.setLayout(self.music_layout)
         scroll.setWidget(self.music_container)
         
+        # Container para músicas locais (estilizado)
+        local_music_container = QWidget()
+        local_music_container.setStyleSheet("""
+            QWidget {
+                background-color: #181818;
+                border-top: 1px solid #282828;
+            }
+        """)
+        local_layout = QVBoxLayout(local_music_container)
+        local_layout.setContentsMargins(12, 12, 12, 12)
+        local_layout.setSpacing(8)
+        
+        # Label do caminho
+        self.path_label = QLabel("Nenhuma pasta selecionada")
+        self.path_label.setFont(QFont("Segoe UI", 9))
+        self.path_label.setStyleSheet("""
+            QLabel {
+                color: #b3b3b3;
+                background-color: transparent;
+                padding: 4px;
+            }
+        """)
+        self.path_label.setWordWrap(True)
+        
+        # Botão de seleção
+        self.button_local = QPushButton()
+        self.button_local.setText("  Selecionar Músicas Locais")
+        self.button_local.setIcon(qta.icon('fa5s.folder-open', color="#FFFFFF"))
+        self.button_local.setIconSize(QSize(16, 16))
+        self.button_local.setFont(QFont("Segoe UI", 10, QFont.Bold))
+        self.button_local.setCursor(Qt.PointingHandCursor)
+        self.button_local.setStyleSheet("""
+            QPushButton {
+                background-color: #1DB954;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 20px;
+                text-align: center;
+            }
+            QPushButton:hover {
+                background-color: #1ed760;
+                transform: scale(1.02);
+            }
+            QPushButton:pressed {
+                background-color: #169c46;
+            }
+        """)
+        
+        local_layout.addWidget(self.button_local)
+        local_layout.addWidget(self.path_label)
+        
         layout.addWidget(header_container)
         layout.addWidget(scroll)
+        layout.addWidget(local_music_container)
         
         self.setLayout(layout)

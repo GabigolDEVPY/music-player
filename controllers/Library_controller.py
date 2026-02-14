@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                               QHBoxLayout, QLabel, QPushButton, QScrollArea, 
-                               QLineEdit, QSlider, QFrame, QTabWidget)
+                            QHBoxLayout, QLabel, QPushButton, QScrollArea, 
+                            QLineEdit, QSlider, QFrame, QTabWidget)
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
 import qtawesome as qta
@@ -9,11 +9,6 @@ from mutagen.easyid3 import EasyID3
 from mutagen.id3 import ID3
 import sys
 import os
-from components.player_control import PlayerControl
-from components.search_bar import SearchBar
-from components.side_panel import SidePanel
-from PySide6.QtWidgets import QStackedWidget
-from components.youtube_panel import YouTubePanel
 from components.music_card import MusicCard
 from services.music_service import MusicService
 from pathlib import Path
