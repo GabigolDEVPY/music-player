@@ -11,7 +11,7 @@ from PySide6.QtCore import Signal
 class MusicCard(QFrame):
     """Card individual de música no painel lateral"""
     clicked = Signal(dict)
-    def __init__(self, title, artist, duration, path, icon):
+    def __init__(self, title, artist, duration, path, icon, position):
         super().__init__()
         self.setFocusPolicy(Qt.StrongFocus)
         self.setFixedHeight(90)
@@ -36,7 +36,8 @@ class MusicCard(QFrame):
             "artist": artist,
             "duration": duration,
             "path": path,
-            "icon": icon
+            "icon": icon,
+            "position": position
         }
 
         layout = QHBoxLayout()

@@ -92,9 +92,13 @@ class PlayerControl(QWidget):
         self.music_player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.music_player.setAudioOutput(self.audio_output)
+        self.progress_slider = QSlider(Qt.Horizontal)
+        
+        self.music_player.positionChanged.connect(self.update_position)
+        self.music_player.durationChanged.connect(self.update_duration)
+        self.progress_slider.sliderMoved.connect(self.set_position)
 
-        progress_slider = QSlider(Qt.Horizontal)
-        progress_slider.setStyleSheet("""
+        self.progress_slider.setStyleSheet("""
             QSlider::groove:horizontal {
                 background: #404040;
                 height: 4px;
@@ -112,13 +116,13 @@ class PlayerControl(QWidget):
                 border-radius: 2px;
             }
         """)
-        progress_slider.setValue(40)
+        self.progress_slider.setValue(40)
         
         self.time_total = QLabel()
         self.time_total.setStyleSheet("color: #b3b3b3; font-size: 9px;")
         
         progress_layout.addWidget(self.time_current)
-        progress_layout.addWidget(progress_slider, 1)
+        progress_layout.addWidget(self.progress_slider, 1)
         progress_layout.addWidget(self.time_total)
         
         # Controles de playback com ícones profissionais
@@ -236,3 +240,23 @@ class PlayerControl(QWidget):
         # A MÁGICA: Define o layout no player_widget e retorna ele
         player_widget.setLayout(layout) 
         return player_widget
+        
+    def format_time(self, ms):
+        seconds = ms // 1000
+        minutes = seconds // 60
+        seconds = seconds % 60
+        return f"{minutes:02}:{seconds:02}"
+
+
+    def update_position(self, position):
+        self.progress_slider.setValue(position)
+        self.time_current.setText(self.format_time(position))
+
+
+    def update_duration(self, duration):
+        self.progress_slider.setRange(0, duration)
+        self.time_total.setText(self.format_time(duration))
+
+
+    def set_position(self, position):
+        self.music_player.setPosition(position)

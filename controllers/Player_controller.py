@@ -12,6 +12,8 @@ from PySide6.QtCore import QUrl
 class PlayerController:
     def __init__(self, player):
         self.player = player       
+        self.musics_list = []
+        self.current_music = None
         self.player.stacked_layout.setCurrentIndex(0) 
 
 
@@ -25,10 +27,19 @@ class PlayerController:
 
 
     def handle_music_selected(self, music_data):
+        self.current_music = music_data
         self.player.stacked_layout.setCurrentIndex(1)
         self.player.music_player.setSource(QUrl.fromLocalFile(music_data["path"]))
         self.player.play_btn.setIcon(qta.icon('fa5s.play', color='white'))
         self.player.song_title.setText(music_data["title"])
         self.player.artist_name.setText(music_data["artist"])
         self.player.album_icon.setPixmap(music_data["icon"])
-        self.player.time_total.setText(music_data["duration"])
+        
+    def next_music(self, status):
+        if status == QMediaPlayer.EndOfMedia:
+            try:
+                self.handle_music_selected(self.musics_list[self.current_music["position"] + 1])
+            except IndexError:
+                self.handle_music_selected(self.musics_list[0])
+            self.player.music_player.play()
+            self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))

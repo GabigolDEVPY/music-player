@@ -15,10 +15,10 @@ class MainController(SpotifyInterface):
 
         # player control
         self.player_control = PlayerController(self.player)
-        
         # change status player/pause button
         self.player.play_btn.clicked.connect(self.player_control.change_status_play)
-
+        #change status player/music end time
+        self.player.music_player.mediaStatusChanged.connect(self.player_control.next_music)
 
         # library controller
         self.library_controller = LibraryController(self.library_panel, self.youtube_panel, self.player_control)

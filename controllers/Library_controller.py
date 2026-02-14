@@ -22,16 +22,21 @@ class LibraryController:
             return
         self.local_panel.path_label.setText(self.path_folder_musics)
         musics = MusicService.get_local_musics(self.path_folder_musics)
+        position = 0
         for music in musics:
+            music["position"] = position
+            self.player.musics_list.append(music)
             card = MusicCard(
                         music["title"],
                         music["artist"],
                         music["duration"],
                         music["path"],
-                        music["icon"]
+                        music["icon"],
+                        music["position"]
                     )
             card.clicked.connect(self.player.handle_music_selected)
             self.local_panel.music_layout.addWidget(card)
+            position += 1
 
 
     def clear_layout(self, layout):
