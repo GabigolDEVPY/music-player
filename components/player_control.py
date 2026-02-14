@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
 import qtawesome as qta
+from PySide6.QtWidgets import QStackedLayout
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 import sys
 
@@ -13,7 +14,36 @@ class PlayerControl(QWidget):
     """Controles do player (direita)"""
     def __init__(self):
         super().__init__()
-        
+
+        self.stacked_layout = QStackedLayout()
+        self.setLayout(self.stacked_layout)
+
+        self.empty_state = self.create_empty_state()
+        self.player_state = self.create_player_state()
+
+        self.stacked_layout.addWidget(self.empty_state)
+        self.stacked_layout.addWidget(self.player_state)
+
+        self.stacked_layout.setCurrentIndex(0)
+
+
+
+    def create_empty_state(self):
+        empty_widget = QWidget()
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
+        label = QLabel("Selecione uma música para começar")
+        label.setFont(QFont("Segoe UI", 14))
+        label.setStyleSheet("color: #777777;")
+        label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(label)
+        empty_widget.setLayout(layout)
+        return empty_widget
+
+
+
+    def create_player_state(self):
+        player_widget = QWidget()
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
         layout.setSpacing(12)
@@ -202,5 +232,7 @@ class PlayerControl(QWidget):
         layout.addSpacing(12)
         layout.addLayout(self.volume_layout)
         layout.addStretch()
-        
-        self.setLayout(layout)
+
+        # A MÁGICA: Define o layout no player_widget e retorna ele
+        player_widget.setLayout(layout) 
+        return player_widget

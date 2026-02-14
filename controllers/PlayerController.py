@@ -11,7 +11,9 @@ from PySide6.QtCore import QUrl
 
 class PlayerController:
     def __init__(self, player):
-        self.player = player
+        self.player = player       
+        self.player.stacked_layout.setCurrentIndex(0) 
+
 
     def change_status_play(self):
         if self.player.music_player.isPlaying():
@@ -22,8 +24,8 @@ class PlayerController:
             self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
 
 
-
     def handle_music_selected(self, music_data):
+        self.player.stacked_layout.setCurrentIndex(1)
         self.player.music_player.setSource(QUrl.fromLocalFile(music_data["path"]))
         self.player.play_btn.setIcon(qta.icon('fa5s.play', color='white'))
         self.player.song_title.setText(music_data["title"])
