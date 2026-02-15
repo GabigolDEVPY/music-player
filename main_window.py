@@ -19,6 +19,15 @@ class MainController(SpotifyInterface):
         self.player.play_btn.clicked.connect(self.player_control.change_status_play)
         #change status player/music end time
         self.player.music_player.mediaStatusChanged.connect(self.player_control.next_music)
+        #change next music
+        self.player.next_btn.clicked.connect(self.player_control.next_music_btn)
+        #change previous music
+        self.player.prev_btn.clicked.connect(self.player_control.previous_music_btn)
+        # change random mode
+        self.player.shuffle_btn.clicked.connect(self.player_control.random_order)
+        #change repeat mode
+        self.player.repeat_btn.clicked.connect(self.player_control.repeat_order)
+        
 
         # library controller
         self.library_controller = LibraryController(self.library_panel, self.youtube_panel, self.player_control)
