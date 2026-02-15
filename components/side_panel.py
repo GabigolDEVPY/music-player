@@ -36,9 +36,9 @@ class SidePanel(QWidget):
         header_layout.addStretch()
         
         # Área scrollável
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setStyleSheet("""
+        self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setStyleSheet("""
             QScrollArea {
                 border: none;
                 background-color: #000000;
@@ -64,7 +64,7 @@ class SidePanel(QWidget):
         self.music_layout.setContentsMargins(8, 8, 8, 8)
         self.music_layout.setAlignment(Qt.AlignTop)
         self.music_container.setLayout(self.music_layout)
-        scroll.setWidget(self.music_container)
+        self.scroll.setWidget(self.music_container)
         
         # Container para músicas locais (estilizado)
         local_music_container = QWidget()
@@ -118,7 +118,7 @@ class SidePanel(QWidget):
         local_layout.addWidget(self.path_label)
         
         layout.addWidget(header_container)
-        layout.addWidget(scroll)
+        layout.addWidget(self.scroll)
         layout.addWidget(local_music_container)
         
         self.setLayout(layout)

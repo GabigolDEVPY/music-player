@@ -33,7 +33,7 @@ class MusicService:
                         cover_data = tag.data
                         break
 
-                pixmap = None
+                pixmap = qta.icon('fa5s.music', color='white').pixmap(QSize(18, 18))
                 if cover_data:
                     pixmap = QPixmap()
                     pixmap.loadFromData(cover_data)    

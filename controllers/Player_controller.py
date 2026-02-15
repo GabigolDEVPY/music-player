@@ -4,20 +4,32 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
 import qtawesome as qta
+import random
 from PySide6.QtMultimedia import QMediaPlayer
 from PySide6.QtWidgets import QStackedLayout
 import sys
 from PySide6.QtCore import QUrl
 
 class PlayerController:
-    def __init__(self, player):
+    def __init__(self, player, local_panel):
         self.player = player       
+        self.local_panel = local_panel
         self.musics_list = []
         self.current_music = None
+        self.cards = []
         self.repeat = False
         self.random = False
         self.player.stacked_layout.setCurrentIndex(0) 
 
+    def select_card_by_position(self, music_data):
+        position = music_data["position"]
+        for i, card in enumerate(self.cards):
+            if i == position:
+                card.setFocus()
+                # Garante que o scroll acompanhe a música se ela pular sozinha
+                self.local_panel.scroll.ensureWidgetVisible(card)
+            else:
+                card.clearFocus()
 
     def change_status_play(self):
         if self.player.music_player.isPlaying():
@@ -30,6 +42,7 @@ class PlayerController:
 
     def handle_music_selected(self, music_data):
         self.current_music = music_data
+        
         self.player.stacked_layout.setCurrentIndex(1)
         self.player.music_player.setSource(QUrl.fromLocalFile(music_data["path"]))
         self.player.play_btn.setIcon(qta.icon('fa5s.play', color='white'))
@@ -39,10 +52,27 @@ class PlayerController:
         
     def next_music(self, status):
         if status == QMediaPlayer.EndOfMedia:
-            try:
-                self.handle_music_selected(self.musics_list[self.current_music["position"] + 1])
-            except IndexError:
-                self.handle_music_selected(self.musics_list[0])
+            # 1. Lógica para decidir qual é a próxima música
+            if self.repeat:
+                target_music = self.current_music
+            elif self.random:
+                if len(self.musics_list) > 1:
+                    new_index = self.current_music["position"]
+                    while new_index == self.current_music["position"]:
+                        new_index = random.randrange(len(self.musics_list))
+                    target_music = self.musics_list[new_index]
+                else:
+                    target_music = self.musics_list[0]
+            else:
+                try:
+                    target_music = self.musics_list[self.current_music["position"] + 1]
+                except IndexError:
+                    target_music = self.musics_list[0]
+
+            # 2. Executa a troca e ATUALIZA O FOCO
+            self.handle_music_selected(target_music)
+            self.select_card_by_position(target_music) # <--- IMPORTANTE: Chama o foco aqui
+            
             self.player.music_player.play()
             self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
             

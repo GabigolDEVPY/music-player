@@ -14,7 +14,7 @@ class MainController(SpotifyInterface):
         super().__init__()
 
         # player control
-        self.player_control = PlayerController(self.player)
+        self.player_control = PlayerController(self.player, self.library_panel)
         # change status player/pause button
         self.player.play_btn.clicked.connect(self.player_control.change_status_play)
         #change status player/music end time
@@ -29,7 +29,7 @@ class MainController(SpotifyInterface):
         self.player.repeat_btn.clicked.connect(self.player_control.repeat_order)
         
 
-        # library controller
+        # library controller / passando player no final
         self.library_controller = LibraryController(self.library_panel, self.youtube_panel, self.player_control)
 
 

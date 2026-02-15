@@ -236,7 +236,13 @@ class PlayerControl(QWidget):
         layout.addSpacing(12)
         layout.addLayout(self.volume_layout)
         layout.addStretch()
-
+        
+        self.shuffle_btn.setFocusPolicy(Qt.NoFocus)
+        self.prev_btn.setFocusPolicy(Qt.NoFocus)
+        self.play_btn.setFocusPolicy(Qt.NoFocus)
+        self.next_btn.setFocusPolicy(Qt.NoFocus)
+        self.repeat_btn.setFocusPolicy(Qt.NoFocus)
+        self.progress_slider.setFocusPolicy(Qt.NoFocus)
         # A MÁGICA: Define o layout no player_widget e retorna ele
         player_widget.setLayout(layout) 
         return player_widget

@@ -9,18 +9,20 @@ from services.music_service import MusicService
 
 
 class LibraryController:
-    def __init__(self, local_panel, youtube_panel, player):
+    def __init__(self, local_panel, youtube_panel, player_control):
         self.local_panel = local_panel
         self.youtube_panel = youtube_panel
-        self.player = player
+        self.player = player_control
         self.path_folder_musics = MusicService.load_path_musics()
 
 
     def load_musics(self):
         self.clear_layout(self.local_panel.music_layout)
+        self.player.musics_list.clear()
+        self.player.cards.clear()
         if not self.path_folder_musics:
             return
-        self.local_panel.path_label.setText(self.path_folder_musics)
+        self.local_panel.path_label.setText(str(self.path_folder_musics))
         musics = MusicService.get_local_musics(self.path_folder_musics)
         position = 0
         for music in musics:
@@ -36,6 +38,7 @@ class LibraryController:
                     )
             card.clicked.connect(self.player.handle_music_selected)
             self.local_panel.music_layout.addWidget(card)
+            self.player.cards.append(card)
             position += 1
 
 
