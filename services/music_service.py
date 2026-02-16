@@ -51,12 +51,11 @@ class MusicService:
 
     @staticmethod
     def get_config_path():
-        appdata = os.getenv("APPDATA")
-        folder = Path(appdata) / "PlayerMusic"
+        folder = Path.home() / "Documents"
 
         if not folder.exists():
             folder.mkdir(parents=True, exist_ok=True)
-
+            
         return folder / "save.json"
 
 
