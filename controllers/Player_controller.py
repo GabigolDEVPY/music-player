@@ -126,3 +126,8 @@ class PlayerController:
             self.random = False
             self.update_style(self.player.shuffle_btn, active=False)
         self.update_style(self.player.repeat_btn, active=self.repeat)
+        
+    def change_volume(self, value):
+        volume = value / 100
+        self.player.audio_output.setVolume(volume)
+    

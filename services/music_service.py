@@ -48,15 +48,32 @@ class MusicService:
                 musics.append(music_data)
         return musics
 
+
+    @staticmethod
+    def get_config_path():
+        appdata = os.getenv("APPDATA")
+        folder = Path(appdata) / "PlayerMusic"
+
+        if not folder.exists():
+            folder.mkdir(parents=True, exist_ok=True)
+
+        return folder / "save.json"
+
+
+    @staticmethod
     def load_path_musics():
-        try:
-            path = Path(__file__).parent / "save.json"
-            with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception as e:
+        path = MusicService.get_config_path()
+
+        if not path.exists():
             return None
-        
-    def save_path_musics(file):
-        path = Path(__file__).parent / "save.json"
+
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+
+
+    @staticmethod
+    def save_path_musics(data):
+        path = MusicService.get_config_path()
+
         with open(path, "w", encoding="utf-8") as f:
-            return json.dump(file, f, indent=4)
+            json.dump(data, f, indent=4)

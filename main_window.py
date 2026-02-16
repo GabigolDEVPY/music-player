@@ -2,17 +2,14 @@ from components.interface import SpotifyInterface
 from controllers.Panel_controller import PanelController
 from controllers.Player_controller import PlayerController
 from controllers.Library_controller import LibraryController
-
-from pathlib import Path
 from PySide6.QtCore import QUrl
 
-
-ROOT_DIR = Path(__file__).parent
 
 class MainController(SpotifyInterface):
     def __init__(self):
         super().__init__()
-
+        self.player.volume_slider.setRange(0, 100)
+        self.player.volume_slider.setValue(70)
         # player control
         self.player_control = PlayerController(self.player, self.library_panel)
         # change status player/pause button
@@ -27,7 +24,8 @@ class MainController(SpotifyInterface):
         self.player.shuffle_btn.clicked.connect(self.player_control.random_order)
         #change repeat mode
         self.player.repeat_btn.clicked.connect(self.player_control.repeat_order)
-        
+        #change volume
+        self.player.volume_slider.valueChanged.connect(self.player_control.change_volume)
 
         # library controller / passando player no final
         self.library_controller = LibraryController(self.library_panel, self.youtube_panel, self.player_control)

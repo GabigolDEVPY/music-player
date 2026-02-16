@@ -197,10 +197,10 @@ class PlayerControl(QWidget):
         self.volume_icon_label = QLabel()
         self.volume_icon_label.setPixmap(qta.icon('fa5s.volume-up', color='#b3b3b3').pixmap(QSize(14, 14)))
         
-        volume_slider = QSlider(Qt.Horizontal)
-        volume_slider.setMaximumWidth(120)
-        volume_slider.setValue(70)
-        volume_slider.setStyleSheet("""
+        self.volume_slider = QSlider(Qt.Horizontal)
+        self.volume_slider.setMaximumWidth(120)
+        self.volume_slider.setValue(70)
+        self.volume_slider.setStyleSheet("""
             QSlider::groove:horizontal {
                 background: #404040;
                 height: 3px;
@@ -221,7 +221,7 @@ class PlayerControl(QWidget):
         
         self.volume_layout.addStretch()
         self.volume_layout.addWidget(self.volume_icon_label)
-        self.volume_layout.addWidget(volume_slider)
+        self.volume_layout.addWidget(self.volume_slider)
         self.volume_layout.addStretch()
         
         # Adicionar tudo ao layout principal

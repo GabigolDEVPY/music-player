@@ -15,10 +15,6 @@ from components.side_panel import SidePanel
 from PySide6.QtWidgets import QStackedWidget
 from components.youtube_panel import YouTubePanel
 from components.music_card import MusicCard
-from pathlib import Path
-
-ROOT_DIR = Path(__file__).parent.parent
-MUSIC_ROOT = ROOT_DIR / "musicas"
 
 class PanelController:
     def __init__(self, stacked_panel, library_controller):
