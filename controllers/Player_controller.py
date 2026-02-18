@@ -79,16 +79,20 @@ class PlayerController:
     def next_music_btn(self, status):
         try:
             self.handle_music_selected(self.musics_list[self.current_music["position"] + 1])
+            self.select_card_by_position(self.current_music)
         except IndexError:
             self.handle_music_selected(self.musics_list[0])
+            self.select_card_by_position(self.current_music)    
         self.player.music_player.play() 
         self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
             
     def previous_music_btn(self, status):
         try:
             self.handle_music_selected(self.musics_list[self.current_music["position"] - 1])
+            self.select_card_by_position(self.current_music)
         except IndexError:
             self.handle_music_selected(self.musics_list[0])
+            self.select_card_by_position(self.current_music)
         self.player.music_player.play()
         self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
         

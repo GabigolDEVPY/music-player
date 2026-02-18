@@ -1,9 +1,5 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                            QHBoxLayout, QLabel, QPushButton, QScrollArea, 
-                            QLineEdit, QSlider, QFrame, QTabWidget)
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
-import qtawesome as qta
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QFont
 import sys
 sys.dont_write_bytecode = True
 from main_window import MainController
