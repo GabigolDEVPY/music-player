@@ -1,16 +1,9 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                               QHBoxLayout, QLabel, QPushButton, QScrollArea, 
-                               QLineEdit, QSlider, QFrame, QTabWidget)
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
+from PySide6.QtCore import  QSize
+from PySide6.QtGui import  QPixmap
 import qtawesome as qta
 from mutagen.mp3 import MP3
-import json
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import ID3, APIC
-import sys
-import os
-from PySide6.QtWidgets import QStackedWidget
 from pathlib import Path
 from models.music import Music
 

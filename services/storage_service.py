@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from models.music import Music
 
 class StorageService:
     @staticmethod
