@@ -32,6 +32,7 @@ class MusicService:
                 pixmap.loadFromData(cover_data)    
 
             music = Music(
+                position=None,
                 title=tags.get("title", ["Sem titulo"])[0],
                 artist=tags.get("artist", ["Desconhecido"])[0],
                 duration=duration,

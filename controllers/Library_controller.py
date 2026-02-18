@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
 from pathlib import Path
 from components.music_card import MusicCard
 from services.music_service import MusicService
+from services.storage_service import StorageService
 
 
 class LibraryController:
@@ -11,7 +12,7 @@ class LibraryController:
         self.local_panel = local_panel
         self.youtube_panel = youtube_panel
         self.player = player_control
-        self.path_folder_musics = MusicService.load_path_musics()
+        self.path_folder_musics = StorageService.load_path_musics()
 
 
     def load_musics(self):
@@ -21,18 +22,18 @@ class LibraryController:
         if not self.path_folder_musics:
             return
         self.local_panel.path_label.setText(str(self.path_folder_musics))
-        musics = MusicService.get_local_musics(self.path_folder_musics)
+        musics = MusicService.load_folder_musics(self.path_folder_musics)
         position = 0
         for music in musics:
-            music["position"] = position
+            music.position = position
             self.player.musics_list.append(music)
             card = MusicCard(
-                        music["title"],
-                        music["artist"],
-                        music["duration"],
-                        music["path"],
-                        music["icon"],
-                        music["position"]
+                        music.title,
+                        music.artist,
+                        music.duration,
+                        music.path,
+                        music.icon,
+                        music.position
                     )
             card.clicked.connect(self.player.handle_music_selected)
             self.local_panel.music_layout.addWidget(card)
@@ -51,5 +52,5 @@ class LibraryController:
         path = QFileDialog.getExistingDirectory(self.local_panel, "Select paste")
         if path:
             self.path_folder_musics = Path(path)
-            MusicService.save_path_musics(path)
+            StorageService.save_path_musics(path)
             self.load_musics()
