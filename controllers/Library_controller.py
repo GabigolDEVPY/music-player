@@ -1,6 +1,4 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                            QHBoxLayout, QLabel, QPushButton, QScrollArea, 
-                            QLineEdit, QSlider, QFrame, QTabWidget, QFileDialog)
+from PySide6.QtWidgets import QFileDialog
 from pathlib import Path
 from components.music_card import MusicCard
 from services.music_service import MusicService

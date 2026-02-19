@@ -1,14 +1,7 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                            QHBoxLayout, QLabel, QPushButton, QScrollArea, 
-                            QLineEdit, QSlider, QFrame, QTabWidget)
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
 import qtawesome as qta
 import random
 from PySide6.QtMultimedia import QMediaPlayer
-from PySide6.QtWidgets import QStackedLayout
 from models.enums import RepeatMode, ShuffleMode
-import sys
 from PySide6.QtCore import QUrl
 
 class PlayerController:
