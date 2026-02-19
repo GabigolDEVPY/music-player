@@ -10,8 +10,11 @@ class MainController(SpotifyInterface):
         super().__init__()
         self.player.volume_slider.setRange(0, 100)
         self.player.volume_slider.setValue(70)
+        
+        
         # player control
         self.player_control = PlayerController(self.player, self.library_panel)
+        
         # change status player/pause button
         self.player.play_btn.clicked.connect(self.player_control.change_status_play)
         #change status player/music end time
