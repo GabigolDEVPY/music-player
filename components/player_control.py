@@ -1,13 +1,9 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                               QHBoxLayout, QLabel, QPushButton, QScrollArea, 
-                               QLineEdit, QSlider, QFrame, QTabWidget)
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSlider)
 from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
+from PySide6.QtGui import QFont
 import qtawesome as qta
 from PySide6.QtWidgets import QStackedLayout
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
-import sys
-
 
 
 class PlayerControl(QWidget):

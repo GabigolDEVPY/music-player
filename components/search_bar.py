@@ -1,10 +1,7 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                               QHBoxLayout, QLabel, QPushButton, QScrollArea, 
-                               QLineEdit, QSlider, QFrame, QTabWidget)
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QTabWidget)
+from PySide6.QtCore import QSize
 import qtawesome as qta
-import sys
+
 
 
 class SearchBar(QWidget):

@@ -7,6 +7,7 @@ import qtawesome as qta
 import random
 from PySide6.QtMultimedia import QMediaPlayer
 from PySide6.QtWidgets import QStackedLayout
+from models.enums import RepeatMode, ShuffleMode
 import sys
 from PySide6.QtCore import QUrl
 
@@ -17,8 +18,8 @@ class PlayerController:
         self.musics_list = []
         self.current_music = None
         self.cards = []
-        self.repeat = False
-        self.random = False
+        self.repeat = RepeatMode.OFF
+        self.random = ShuffleMode.OFF
         self.player.stacked_layout.setCurrentIndex(0) 
 
     def select_card_by_position(self, music_data):
@@ -41,7 +42,6 @@ class PlayerController:
 
 
     def handle_music_selected(self, music_data):
-        print(music_data)
         self.current_music = music_data
         self.player.stacked_layout.setCurrentIndex(1)
         self.player.music_player.setSource(QUrl.fromLocalFile(music_data.path))
@@ -54,9 +54,9 @@ class PlayerController:
         print(self.current_music.__dict__)
         if status == QMediaPlayer.EndOfMedia:
             # 1. Lógica para decidir qual é a próxima música
-            if self.repeat:
+            if self.repeat == RepeatMode.ON:
                 target_music = self.current_music
-            elif self.random:
+            elif self.random == ShuffleMode.ON:
                 if len(self.musics_list) > 1:
                     new_index = self.current_music.position
                     while new_index == self.current_music.position:
@@ -118,19 +118,26 @@ class PlayerController:
         self.button.setStyleSheet(btn_style)
 
     def random_order(self):
-        self.random = not self.random
-        if self.random:
-            self.repeat = False
+        if self.random == ShuffleMode.OFF:
+            self.random = ShuffleMode.ON
+            
+            self.repeat = RepeatMode.OFF
             self.update_style(self.player.repeat_btn, active=False)
-        self.update_style(self.player.shuffle_btn, active=self.random)
+        else:
+            self.random = ShuffleMode.OFF
+        self.update_style(self.player.shuffle_btn, active=self.random == ShuffleMode.ON)
         
             
     def repeat_order(self):
-        self.repeat = not self.repeat
-        if self.repeat:
-            self.random = False
+        if self.repeat == RepeatMode.OFF:
+            self.repeat = RepeatMode.ON
+            
+            self.random = ShuffleMode.OFF
             self.update_style(self.player.shuffle_btn, active=False)
-        self.update_style(self.player.repeat_btn, active=self.repeat)
+        else:
+            self.repeat = RepeatMode.OFF
+        self.update_style(self.player.repeat_btn,active=self.repeat == RepeatMode.ON)
+        
         
     def change_volume(self, value):
         volume = value / 100

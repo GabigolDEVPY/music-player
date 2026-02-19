@@ -1,12 +1,9 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                               QHBoxLayout, QLabel, QPushButton, QScrollArea, 
-                               QLineEdit, QSlider, QFrame, QTabWidget)
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame)
 from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
+from PySide6.QtGui import QFont
 import qtawesome as qta
 from components.marquee_label import MarqueeLabel
 from models.music import Music
-import sys
 from PySide6.QtCore import Signal
 
 class MusicCard(QFrame):
