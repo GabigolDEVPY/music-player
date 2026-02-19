@@ -22,7 +22,7 @@ class PlayerController:
         self.player.stacked_layout.setCurrentIndex(0) 
 
     def select_card_by_position(self, music_data):
-        position = music_data["position"]
+        position = music_data.position
         for i, card in enumerate(self.cards):
             if i == position:
                 card.setFocus()
@@ -41,31 +41,32 @@ class PlayerController:
 
 
     def handle_music_selected(self, music_data):
+        print(music_data)
         self.current_music = music_data
-        
         self.player.stacked_layout.setCurrentIndex(1)
-        self.player.music_player.setSource(QUrl.fromLocalFile(music_data["path"]))
+        self.player.music_player.setSource(QUrl.fromLocalFile(music_data.path))
         self.player.play_btn.setIcon(qta.icon('fa5s.play', color='white'))
-        self.player.song_title.setText(music_data["title"])
-        self.player.artist_name.setText(music_data["artist"])
-        self.player.album_icon.setPixmap(music_data["icon"])
+        self.player.song_title.setText(music_data.title)
+        self.player.artist_name.setText(music_data.artist)
+        self.player.album_icon.setPixmap(music_data.icon)
         
     def next_music(self, status):
+        print(self.current_music.__dict__)
         if status == QMediaPlayer.EndOfMedia:
             # 1. Lógica para decidir qual é a próxima música
             if self.repeat:
                 target_music = self.current_music
             elif self.random:
                 if len(self.musics_list) > 1:
-                    new_index = self.current_music["position"]
-                    while new_index == self.current_music["position"]:
+                    new_index = self.current_music.position
+                    while new_index == self.current_music.position:
                         new_index = random.randrange(len(self.musics_list))
                     target_music = self.musics_list[new_index]
                 else:
                     target_music = self.musics_list[0]
             else:
                 try:
-                    target_music = self.musics_list[self.current_music["position"] + 1]
+                    target_music = self.musics_list[self.current_music.position + 1]
                 except IndexError:
                     target_music = self.musics_list[0]
 
@@ -78,7 +79,7 @@ class PlayerController:
             
     def next_music_btn(self, status):
         try:
-            self.handle_music_selected(self.musics_list[self.current_music["position"] + 1])
+            self.handle_music_selected(self.musics_list[self.current_music.position + 1])
             self.select_card_by_position(self.current_music)
         except IndexError:
             self.handle_music_selected(self.musics_list[0])
@@ -88,7 +89,7 @@ class PlayerController:
             
     def previous_music_btn(self, status):
         try:
-            self.handle_music_selected(self.musics_list[self.current_music["position"] - 1])
+            self.handle_music_selected(self.musics_list[self.current_music.position - 1])
             self.select_card_by_position(self.current_music)
         except IndexError:
             self.handle_music_selected(self.musics_list[0])

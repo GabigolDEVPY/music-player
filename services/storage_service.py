@@ -8,6 +8,7 @@ class StorageService:
 
         if not folder.exists():
             folder.mkdir(parents=True, exist_ok=True)
+            print(folder)
         return folder / "save.json"
 
     @staticmethod

@@ -5,12 +5,13 @@ from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFont, QPixmap, QPalette, QColor, QIcon
 import qtawesome as qta
 from components.marquee_label import MarqueeLabel
+from models.music import Music
 import sys
 from PySide6.QtCore import Signal
 
 class MusicCard(QFrame):
     """Card individual de música no painel lateral"""
-    clicked = Signal(dict)
+    clicked = Signal(object)
     def __init__(self, title, artist, duration, path, icon, position):
         super().__init__()
         self.setFocusPolicy(Qt.StrongFocus)
@@ -31,14 +32,14 @@ class MusicCard(QFrame):
                 background-color: #404040;
             }
         """)
-        self.music_data = {
-            "title": title,
-            "artist": artist,
-            "duration": duration,
-            "path": path,
-            "icon": icon,
-            "position": position
-        }
+        self.music_data = Music(
+            title=title,
+            artist= artist,
+            duration=duration,
+            path=path,
+            icon= icon,
+            position=position
+        )
 
         layout = QHBoxLayout()
         layout.setSpacing(8)
