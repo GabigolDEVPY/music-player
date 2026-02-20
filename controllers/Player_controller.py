@@ -1,6 +1,8 @@
 import qtawesome as qta
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSlider)
 import random
-from PySide6.QtMultimedia import QMediaPlayer
+from PySide6.QtCore import Qt, QSize
+from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from models.enums import RepeatMode, ShuffleMode
 from PySide6.QtCore import QUrl
 
@@ -14,6 +16,28 @@ class PlayerController:
         self.repeat = RepeatMode.OFF
         self.random = ShuffleMode.OFF
         self.player.stacked_layout.setCurrentIndex(0) 
+        
+        self.music_player = QMediaPlayer()
+        self.audio_output = QAudioOutput()
+        self.music_player.setAudioOutput(self.audio_output)
+        
+        self._connect_signals()
+
+
+    def _connect_signals(self):
+        # signals view
+        self.music_player.positionChanged.connect(self.update_position)
+        self.music_player.durationChanged.connect(self.update_duration)
+        self.music_player.mediaStatusChanged.connect(self.next_music)     
+        
+        #signals player interface
+        self.player.progress_slider.sliderMoved.connect(self.set_position)
+        self.player.play_btn.clicked.connect(self.change_status_play)
+        self.player.next_btn.clicked.connect(self.next_music_btn)
+        self.player.prev_btn.clicked.connect(self.previous_music_btn)
+        self.player.shuffle_btn.clicked.connect(self.random_order)
+        self.player.repeat_btn.clicked.connect(self.repeat_order)
+        self.player.volume_slider.valueChanged.connect(self.change_volume)
 
     def select_card_by_position(self, music_data):
         position = music_data.position
@@ -26,18 +50,18 @@ class PlayerController:
                 card.clearFocus()
 
     def change_status_play(self):
-        if self.player.music_player.isPlaying():
+        if self.music_player.isPlaying():
             self.player.play_btn.setIcon(qta.icon('fa5s.play', color='white'))
-            self.player.music_player.pause()
+            self.music_player.pause()
         else:
-            self.player.music_player.play()
+            self.music_player.play()
             self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
 
 
     def handle_music_selected(self, music_data):
         self.current_music = music_data
         self.player.stacked_layout.setCurrentIndex(1)
-        self.player.music_player.setSource(QUrl.fromLocalFile(music_data.path))
+        self.music_player.setSource(QUrl.fromLocalFile(music_data.path))
         self.player.play_btn.setIcon(qta.icon('fa5s.play', color='white'))
         self.player.song_title.setText(music_data.title)
         self.player.artist_name.setText(music_data.artist)
@@ -67,7 +91,7 @@ class PlayerController:
             self.handle_music_selected(target_music)
             self.select_card_by_position(target_music) # <--- IMPORTANTE: Chama o foco aqui
             
-            self.player.music_player.play()
+            self.music_player.play()
             self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
             
     def next_music_btn(self, status):
@@ -77,7 +101,7 @@ class PlayerController:
         except IndexError:
             self.handle_music_selected(self.musics_list[0])
             self.select_card_by_position(self.current_music)    
-        self.player.music_player.play() 
+        self.music_player.play() 
         self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
             
     def previous_music_btn(self, status):
@@ -87,7 +111,7 @@ class PlayerController:
         except IndexError:
             self.handle_music_selected(self.musics_list[0])
             self.select_card_by_position(self.current_music)
-        self.player.music_player.play()
+        self.music_player.play()
         self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
         
     def update_style(self, button, active=None):
@@ -134,5 +158,24 @@ class PlayerController:
         
     def change_volume(self, value):
         volume = value / 100
-        self.player.audio_output.setVolume(volume)
+        self.audio_output.setVolume(volume)
     
+    def format_time(self, ms):
+        seconds = ms // 1000
+        minutes = seconds // 60
+        seconds = seconds % 60
+        return f"{minutes:02}:{seconds:02}"
+
+
+    def update_position(self, position):
+        self.player.progress_slider.setValue(position)
+        self.player.time_current.setText(self.format_time(position))
+
+
+    def update_duration(self, duration):
+        self.player.progress_slider.setRange(0, duration)
+        self.player.time_total.setText(self.format_time(duration))
+
+
+    def set_position(self, position):
+        self.music_player.setPosition(position)

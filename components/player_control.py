@@ -84,16 +84,8 @@ class PlayerControl(QWidget):
         
         self.time_current = QLabel("00:00")
         self.time_current.setStyleSheet("color: #b3b3b3; font-size: 9px;")
-        
-        self.music_player = QMediaPlayer()
-        self.audio_output = QAudioOutput()
-        self.music_player.setAudioOutput(self.audio_output)
+    
         self.progress_slider = QSlider(Qt.Horizontal)
-        
-        self.music_player.positionChanged.connect(self.update_position)
-        self.music_player.durationChanged.connect(self.update_duration)
-        self.progress_slider.sliderMoved.connect(self.set_position)
-
         self.progress_slider.setStyleSheet("""
             QSlider::groove:horizontal {
                 background: #404040;
@@ -196,6 +188,7 @@ class PlayerControl(QWidget):
         self.volume_slider = QSlider(Qt.Horizontal)
         self.volume_slider.setMaximumWidth(120)
         self.volume_slider.setValue(70)
+        self.volume_slider.setRange(0, 100)
         self.volume_slider.setStyleSheet("""
             QSlider::groove:horizontal {
                 background: #404040;
@@ -243,22 +236,3 @@ class PlayerControl(QWidget):
         player_widget.setLayout(layout) 
         return player_widget
         
-    def format_time(self, ms):
-        seconds = ms // 1000
-        minutes = seconds // 60
-        seconds = seconds % 60
-        return f"{minutes:02}:{seconds:02}"
-
-
-    def update_position(self, position):
-        self.progress_slider.setValue(position)
-        self.time_current.setText(self.format_time(position))
-
-
-    def update_duration(self, duration):
-        self.progress_slider.setRange(0, duration)
-        self.time_total.setText(self.format_time(duration))
-
-
-    def set_position(self, position):
-        self.music_player.setPosition(position)

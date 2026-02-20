@@ -7,10 +7,14 @@ from services.storage_service import StorageService
 
 class LibraryController:
     def __init__(self, local_panel, youtube_panel, player_control):
-        self.local_panel = local_panel
+        self.local_panel = local_panel #mesmo que library panel
         self.youtube_panel = youtube_panel
         self.player = player_control
         self.path_folder_musics = StorageService.load_path_musics()
+        self._connect_signals()
+    
+    def _connect_signals(self):
+        self.local_panel.button_local.clicked.connect(self.change_local_path)
 
 
     def load_musics(self):
