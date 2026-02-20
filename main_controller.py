@@ -11,16 +11,15 @@ class MainController():
         self.view = SpotifyInterface()
         
         # player controller with signals 
-        self.player_control = PlayerController(
+        self.player_controller = PlayerController(
             self.view.player,
-            self.view.library_panel
         )
 
         # library controller / passando player no final
         self.library_controller = LibraryController(
             self.view.library_panel, 
             self.view.youtube_panel, 
-            self.player_control
+            self.player_controller
             )
 
 
@@ -31,6 +30,10 @@ class MainController():
             self.library_controller
             )
         
+        #select card by  
+        self.player_controller.music_changed.connect(
+        self.library_controller.select_card_by_position
+        )
         
     def run(self):
         self.view.show()

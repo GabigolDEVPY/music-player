@@ -12,23 +12,26 @@ class LibraryController:
         self.player = player_control
         self.path_folder_musics = StorageService.load_path_musics()
         self._connect_signals()
+        self.cards = []
+        
+        
     
     def _connect_signals(self):
         self.local_panel.button_local.clicked.connect(self.change_local_path)
 
 
     def load_musics(self):
-        self.clear_layout(self.local_panel.music_layout)
-        self.player.musics_list.clear()
-        self.player.cards.clear()
+        self.clear_layout_and_cards()
         if not self.path_folder_musics:
             return
         self.local_panel.path_label.setText(str(self.path_folder_musics))
         musics = MusicService.load_folder_musics(self.path_folder_musics)
-        position = 0
+        cards = []
+        
+        for index, music in enumerate(musics):
+            music.position = index
+        self.player.set_playlist(musics)
         for music in musics:
-            music.position = position
-            self.player.musics_list.append(music)
             card = MusicCard(
                         music.title,
                         music.artist,
@@ -39,16 +42,9 @@ class LibraryController:
                     )
             card.clicked.connect(self.player.handle_music_selected)
             self.local_panel.music_layout.addWidget(card)
-            self.player.cards.append(card)
-            position += 1
+            cards.append(card)
+        self.set_cards(cards)
 
-
-    def clear_layout(self, layout):
-        while layout.count():
-            item = layout.takeAt(0)
-            widget = item.widget()
-            if widget is not None:
-                widget.deleteLater()
                 
     def change_local_path(self):
         path = QFileDialog.getExistingDirectory(self.local_panel, "Select paste")
@@ -56,3 +52,25 @@ class LibraryController:
             self.path_folder_musics = Path(path)
             StorageService.save_path_musics(path)
             self.load_musics()
+            
+    def clear_layout_and_cards(self):
+        self.player.clear_music_lists()
+        self.cards.clear()
+        while self.local_panel.music_layout.count():
+            item = self.local_panel.music_layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+                
+    def set_cards(self, cards):
+        self.cards = cards
+    
+    def select_card_by_position(self, music_data):
+        position = music_data.position
+        for i, card in enumerate(self.cards):
+            if i == position:
+                card.setFocus()
+                # Garante que o scroll acompanhe a música se ela pular sozinha
+                self.local_panel.scroll.ensureWidgetVisible(card)
+            else:
+                card.clearFocus()

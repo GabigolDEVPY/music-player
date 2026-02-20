@@ -1,26 +1,25 @@
 import qtawesome as qta
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSlider)
 import random
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QUrl, Signal, QObject
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from models.enums import RepeatMode, ShuffleMode
-from PySide6.QtCore import QUrl
 
-class PlayerController:
-    def __init__(self, player, local_panel):
+class PlayerController(QObject):
+    
+    music_changed = Signal(object)
+    
+    def __init__(self, player):
+        super().__init__()
         self.player = player       
-        self.local_panel = local_panel
         self.musics_list = []
         self.current_music = None
-        self.cards = []
         self.repeat = RepeatMode.OFF
         self.random = ShuffleMode.OFF
-        self.player.stacked_layout.setCurrentIndex(0) 
-        
         self.music_player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.music_player.setAudioOutput(self.audio_output)
-        
+        # call function connect the signals
         self._connect_signals()
 
 
@@ -39,15 +38,6 @@ class PlayerController:
         self.player.repeat_btn.clicked.connect(self.repeat_order)
         self.player.volume_slider.valueChanged.connect(self.change_volume)
 
-    def select_card_by_position(self, music_data):
-        position = music_data.position
-        for i, card in enumerate(self.cards):
-            if i == position:
-                card.setFocus()
-                # Garante que o scroll acompanhe a música se ela pular sozinha
-                self.local_panel.scroll.ensureWidgetVisible(card)
-            else:
-                card.clearFocus()
 
     def change_status_play(self):
         if self.music_player.isPlaying():
@@ -60,6 +50,7 @@ class PlayerController:
 
     def handle_music_selected(self, music_data):
         self.current_music = music_data
+        self.music_changed.emit(self.current_music)
         self.player.stacked_layout.setCurrentIndex(1)
         self.music_player.setSource(QUrl.fromLocalFile(music_data.path))
         self.player.play_btn.setIcon(qta.icon('fa5s.play', color='white'))
@@ -68,7 +59,6 @@ class PlayerController:
         self.player.album_icon.setPixmap(music_data.icon)
         
     def next_music(self, status):
-        print(self.current_music.__dict__)
         if status == QMediaPlayer.EndOfMedia:
             # 1. Lógica para decidir qual é a próxima música
             if self.repeat == RepeatMode.ON:
@@ -89,28 +79,25 @@ class PlayerController:
 
             # 2. Executa a troca e ATUALIZA O FOCO
             self.handle_music_selected(target_music)
-            self.select_card_by_position(target_music) # <--- IMPORTANTE: Chama o foco aqui
+            self.music_changed.emit(self.current_music)
             
             self.music_player.play()
             self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
             
-    def next_music_btn(self, status):
+    def next_music_btn(self):
         try:
             self.handle_music_selected(self.musics_list[self.current_music.position + 1])
-            self.select_card_by_position(self.current_music)
         except IndexError:
             self.handle_music_selected(self.musics_list[0])
-            self.select_card_by_position(self.current_music)    
         self.music_player.play() 
         self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
             
-    def previous_music_btn(self, status):
+            
+    def previous_music_btn(self):
         try:
             self.handle_music_selected(self.musics_list[self.current_music.position - 1])
-            self.select_card_by_position(self.current_music)
         except IndexError:
             self.handle_music_selected(self.musics_list[0])
-            self.select_card_by_position(self.current_music)
         self.music_player.play()
         self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
         
@@ -148,7 +135,6 @@ class PlayerController:
     def repeat_order(self):
         if self.repeat == RepeatMode.OFF:
             self.repeat = RepeatMode.ON
-            
             self.random = ShuffleMode.OFF
             self.update_style(self.player.shuffle_btn, active=False)
         else:
@@ -179,3 +165,13 @@ class PlayerController:
 
     def set_position(self, position):
         self.music_player.setPosition(position)
+    
+                
+    def set_playlist(self, musics):
+        self.musics_list = musics
+    
+    def clear_music_lists(self):
+        self.musics_list.clear()
+        
+        
+    
