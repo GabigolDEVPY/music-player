@@ -8,8 +8,17 @@ class Playlist(QObject):
     def __init__(self):
         super().__init__()
         self.playlists = []
+        self.current_playlist = None
     
     def create_playlist(self, name):
         playlist = Playlist(name)
         self.playlists.append(playlist)
+    
+    def delete_music_playlist(self, position):
+        for music in self.current_playlist.musics:
+            if music.position == position:
+                self.current_playlist.musics.remove(music)
+    
+    def add_music_in_playlist(self, music):
+        self.current_playlist.musics.append(music)
         
