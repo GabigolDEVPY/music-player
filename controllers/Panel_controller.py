@@ -16,11 +16,7 @@ class PanelController:
 
     def change_panel(self, index):
         self.stacked_panel.setCurrentIndex(index)
-        if index == 0:
-            self.library_controller.load_musics()
 
-        elif index == 1:
-            pass
         
     def change_playlist_panel(self):
         self.stacked_panel.currentWidget().stack.setCurrentIndex(0)

@@ -10,16 +10,17 @@ class PlayerController(QObject):
     
     music_changed = Signal(object)
     
-    def __init__(self, player):
+    def __init__(self, player, cache_data):
         super().__init__()
-        self.player = player       
-        self.musics_list = []
+        self.player = player   
+        self.musics_list = cache_data.get_music_list()
         self.current_music = None
         self.repeat = RepeatMode.OFF
         self.random = ShuffleMode.OFF
         self.music_player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.music_player.setAudioOutput(self.audio_output)
+        
         # call function connect the signals
         self._connect_signals()
 
@@ -60,6 +61,7 @@ class PlayerController(QObject):
         self.player.album_icon.setPixmap(music_data.icon)
         
     def next_music(self, status):
+        print("musicas do playercontroller",self.musics_list)
         if status == QMediaPlayer.EndOfMedia:
             # 1. Lógica para decidir qual é a próxima música
             if self.repeat == RepeatMode.ON:
@@ -153,7 +155,7 @@ class PlayerController(QObject):
         self.musics_list = musics
     
     def clear_music_lists(self):
-        self.musics_list.clear()
+        self.musics_list = None
         
         
     
