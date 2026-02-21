@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout)
 from components.player_control import PlayerControl
 from components.search_bar import SearchBar
-from components.side_panel import SidePanel
+from components.local_panel import SidePanel
 from PySide6.QtWidgets import QStackedWidget
 from components.youtube_panel import YouTubePanel
 
