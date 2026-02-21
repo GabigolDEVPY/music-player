@@ -1,6 +1,7 @@
 import qtawesome as qta
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSlider)
 import random
+from styles.button_shuffle_repeat import update_style
 from PySide6.QtCore import Qt, QSize, QUrl, Signal, QObject
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from models.enums import RepeatMode, ShuffleMode
@@ -101,45 +102,26 @@ class PlayerController(QObject):
         self.music_player.play()
         self.player.play_btn.setIcon(qta.icon('fa5s.pause', color='white'))
         
-    def update_style(self, button, active=None):
-        self.button = button
-        if active is True:
-            colors = [ "#1bba53", "#4ee783"]
-        else:
-            colors = [ "#1a1a1a", "#282828"]
-            
-        btn_style = f"""
-            QPushButton {{
-                background-color: {colors[0]};
-                color: white;
-                border: none;
-                border-radius: 20px;
-            }}
-            QPushButton:hover {{
-                background-color: {colors[1]};
-            }}
-        """
-        self.button.setStyleSheet(btn_style)
 
     def random_order(self):
         if self.random == ShuffleMode.OFF:
             self.random = ShuffleMode.ON
             
             self.repeat = RepeatMode.OFF
-            self.update_style(self.player.repeat_btn, active=False)
+            update_style(self, self.player.repeat_btn, active=False)
         else:
             self.random = ShuffleMode.OFF
-        self.update_style(self.player.shuffle_btn, active=self.random == ShuffleMode.ON)
+        update_style(self, self.player.shuffle_btn, active=self.random == ShuffleMode.ON)
         
             
     def repeat_order(self):
         if self.repeat == RepeatMode.OFF:
             self.repeat = RepeatMode.ON
             self.random = ShuffleMode.OFF
-            self.update_style(self.player.shuffle_btn, active=False)
+            update_style(self, self.player.shuffle_btn, active=False)
         else:
             self.repeat = RepeatMode.OFF
-        self.update_style(self.player.repeat_btn,active=self.repeat == RepeatMode.ON)
+        update_style(self, self.player.repeat_btn,active=self.repeat == RepeatMode.ON)
         
         
     def change_volume(self, value):

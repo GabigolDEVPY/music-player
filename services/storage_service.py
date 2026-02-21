@@ -4,7 +4,8 @@ from pathlib import Path
 class StorageService:
     @staticmethod
     def get_config_path():
-        folder = Path.home() / "Documents"
+        folder = Path.home() / "Documentos"
+        print(folder)
 
         if not folder.exists():
             folder.mkdir(parents=True, exist_ok=True)

@@ -60,6 +60,23 @@ class SidePanel(QWidget):
         tabs_layout.addWidget(self.btn_tab_songs)
         tabs_layout.addStretch()
 
+        self.btn_reload = QPushButton()
+        self.btn_reload.setIcon(qta.icon('fa5s.sync-alt', color="#b3b3b3"))
+        self.btn_reload.setIconSize(QSize(13, 13))
+        self.btn_reload.setCursor(Qt.PointingHandCursor)
+        self.btn_reload.setToolTip("Recarregar")
+        self.btn_reload.setStyleSheet("""
+            QPushButton {
+                background-color: transparent;
+                border: none;
+                border-radius: 4px;
+                padding: 6px 8px;
+            }
+            QPushButton:hover { background-color: #1a1a1a; }
+            QPushButton:pressed { background-color: #282828; }
+        """)
+        tabs_layout.addWidget(self.btn_reload)
+
         # ── Stack de conteúdo ──────────────────────────────────────────────────
         self.stack = QStackedWidget()
         self.stack.setStyleSheet("background-color: #000000;")
