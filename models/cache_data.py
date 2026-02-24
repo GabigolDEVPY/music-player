@@ -22,3 +22,12 @@ class CacheData(QObject):
     
     def get_local_path(self):
         return self.local_path
+    
+    def set_playlists(self, playlists):
+        self.playlists = playlists
+        
+    def set_local_path(self, path):
+        self.local_path = path
+        
+    def set_songs(self, songs):
+        self.songs = songs
