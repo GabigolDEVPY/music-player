@@ -1,8 +1,7 @@
 import qtawesome as qta
-from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QSlider)
 import random
 from styles.button_shuffle_repeat import update_style
-from PySide6.QtCore import Qt, QSize, QUrl, Signal, QObject
+from PySide6.QtCore import QUrl, Signal, QObject
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from models.enums import RepeatMode, ShuffleMode
 
@@ -61,7 +60,6 @@ class PlayerController(QObject):
         self.player.album_icon.setPixmap(music_data.icon)
         
     def next_music(self, status):
-        print("musicas do playercontroller",self.musics_list)
         if status == QMediaPlayer.EndOfMedia:
             # 1. Lógica para decidir qual é a próxima música
             if self.repeat == RepeatMode.ON:

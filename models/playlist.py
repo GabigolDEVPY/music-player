@@ -1,6 +1,4 @@
 from dataclasses import dataclass
-from models.music import Music
-from PySide6.QtGui import QPixmap
 
 @dataclass
 class Playlist:

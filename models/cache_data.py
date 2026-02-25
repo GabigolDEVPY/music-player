@@ -1,11 +1,7 @@
-from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea)
-from PySide6.QtGui import QFont
-from PySide6.QtCore import Qt, QSize, QUrl, Signal, QObject
-import qtawesome as qta
+from PySide6.QtCore import Signal, QObject
 from services.storage_service import StorageService
 from services.playlist_service import PlaylistService
 from services.music_service import MusicService
-from pathlib import Path
 from typing import Any
 
 class CacheData(QObject):
@@ -32,15 +28,14 @@ class CacheData(QObject):
         
     def set_local_path(self, path):
         self.local_path = path
-        self.init_data(path)
+        self.init_data()
         
     def set_songs(self, songs):
         self.songs = songs
         
-    def init_data(self, path):
-        songs = MusicService.load_folder_musics(path)
+    def init_data(self):
+        songs = MusicService.load_folder_musics(self.local_path)
         playlists = PlaylistService.get_playlists()
-        local_path = StorageService.load_path_musics()
         
         self.set_songs(songs)
         self.set_playlists(playlists)

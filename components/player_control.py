@@ -3,7 +3,6 @@ from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFont
 import qtawesome as qta
 from PySide6.QtWidgets import QStackedLayout
-from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 
 class PlayerControl(QWidget):

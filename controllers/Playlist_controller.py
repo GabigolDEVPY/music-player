@@ -1,7 +1,4 @@
-from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea)
-from PySide6.QtGui import QFont
-from PySide6.QtCore import Qt, QSize, QUrl, Signal, QObject
-import qtawesome as qta
+from PySide6.QtCore import QObject
 from components.playlist_card import PlaylistCard
 from models.playlist import Playlist
 

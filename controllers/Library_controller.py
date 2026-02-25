@@ -17,13 +17,12 @@ class LibraryController:
     
     def _connect_signals(self):
         self.local_panel.button_local.clicked.connect(self.change_local_path)
+        self.local_panel.btn_reload.clicked.connect(self.reload_data)
 
 
     def load_musics(self, musics):
-        print("usando o load musics")
         self.clear_layout_and_cards()
         musics = musics
-        print(musics)
         for index, music in enumerate(musics):
             music.position = index
             card = MusicCard(
@@ -48,7 +47,8 @@ class LibraryController:
             self.local_panel.path_label.setText(str(self.cache_data.local_path))
             self.cache_data.set_local_path(path)
             
-
+    def reload_data(self):
+        self.cache_data.init_data()
 
     def clear_layout_and_cards(self):
         self.cards.clear()
@@ -70,5 +70,3 @@ class LibraryController:
             else:
                 card.clearFocus()
                 
-    def reload_data(self):
-        pass
