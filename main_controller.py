@@ -47,6 +47,22 @@ class MainController():
         self.library_controller.select_card_by_position
         )
         
+        
+        
+        
+        self.cache_data.reload_data.connect(
+            lambda _: self.library_controller.load_musics(self.cache_data.get_music_list())
+        )
+
+        self.cache_data.reload_data.connect(
+            lambda _: self.player_controller.set_playlist(self.cache_data.get_music_list())
+        )
+
+        self.cache_data.reload_data.connect(
+            lambda _: self.playlist_controller.populate_panel_playlists(self.cache_data.get_playlists())
+        )
+        self.cache_data.reload_data.emit(self.cache_data.get_local_path())
+        
     def run(self):
         self.view.show()
 

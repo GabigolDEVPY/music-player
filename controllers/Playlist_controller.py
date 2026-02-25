@@ -11,9 +11,7 @@ class Playlist(QObject):
         super().__init__()
         self.cache_data = cache_data
         self.local_panel = local_panel
-        self.playlists = cache_data.get_playlists()
         self.current_playlist = None
-        self.populate_panel_playlists()
         self._connect_signals()
 
     def _connect_signals(self):
@@ -33,8 +31,8 @@ class Playlist(QObject):
     def add_music_in_playlist(self, music):
         self.current_playlist.musics.append(music)
         
-    def populate_panel_playlists(self):
-        for playlist in self.playlists:
+    def populate_panel_playlists(self, playlists):
+        for playlist in playlists:
             card = PlaylistCard(
                 title=playlist.title,
                 description=playlist.description,

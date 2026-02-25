@@ -1,15 +1,19 @@
 import json
 from pathlib import Path
-from models.cache_data import CacheData
+import platform
+
+platform_system = platform.system()
 
 class StorageService:
     @staticmethod
     def get_config_path():
-        folder = Path.home() / "Documentos"
+        if platform_system == "Windows":
+            folder = Path.home() / "Documents"
+        else:
+            folder = Path.home() / "Documentos"
 
         if not folder.exists():
             folder.mkdir(parents=True, exist_ok=True)
-            print(folder)
         return folder / "save.json"
 
     @staticmethod
