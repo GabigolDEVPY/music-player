@@ -32,6 +32,7 @@ class Playlist(QObject):
         self.current_playlist.musics.append(music)
         
     def populate_panel_playlists(self, playlists):
+        self.clear_layout_and_cards()
         for playlist in playlists:
             card = PlaylistCard(
                 title=playlist.title,
@@ -40,3 +41,10 @@ class Playlist(QObject):
                 playlist_id=playlist.playlist_id
             )
             self.local_panel.playlist_layout.addWidget(card)
+            
+    def clear_layout_and_cards(self):
+        while self.local_panel.playlist_layout.count():
+            item = self.local_panel.playlist_layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()

@@ -20,8 +20,10 @@ class LibraryController:
 
 
     def load_musics(self, musics):
+        print("usando o load musics")
         self.clear_layout_and_cards()
         musics = musics
+        print(musics)
         for index, music in enumerate(musics):
             music.position = index
             card = MusicCard(

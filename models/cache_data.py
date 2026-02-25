@@ -31,9 +31,18 @@ class CacheData(QObject):
         self.playlists = playlists
         
     def set_local_path(self, path):
-        print("usando local pathh settttttttttttttttt")
         self.local_path = path
-        self.reload_data.emit(self.local_path)
+        self.init_data(path)
         
     def set_songs(self, songs):
         self.songs = songs
+        
+    def init_data(self, path):
+        songs = MusicService.load_folder_musics(path)
+        playlists = PlaylistService.get_playlists()
+        local_path = StorageService.load_path_musics()
+        
+        self.set_songs(songs)
+        self.set_playlists(playlists)
+        
+        self.reload_data.emit(self.local_path)
