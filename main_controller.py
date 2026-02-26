@@ -4,7 +4,6 @@ from controllers.Player_controller import PlayerController
 from controllers.Library_controller import LibraryController
 from controllers.Playlist_controller import Playlist
 from models.cache_data import CacheData
-from PySide6.QtCore import QUrl
 
 
 class MainController():
@@ -48,22 +47,16 @@ class MainController():
         )
         
         
-        
-        
-        self.cache_data.reload_data.connect(
-            lambda _: self.library_controller.load_musics(self.cache_data.get_music_list())
-        )
+        self.cache_data.reload_data.connect(self.call_functions_reload_data)
+    
 
-        self.cache_data.reload_data.connect(
-            lambda _: self.player_controller.set_playlist(self.cache_data.get_music_list())
-        )
-
-        self.cache_data.reload_data.connect(
-            lambda _: self.playlist_controller.populate_panel_playlists(self.cache_data.get_playlists())
-        )
         self.cache_data.reload_data.emit(self.cache_data.get_local_path())
         
+
+    def call_functions_reload_data(self):
+        self.library_controller.load_musics(self.cache_data.get_music_list())
+        self.player_controller.set_playlist(self.cache_data.get_music_list())
+        self.playlist_controller.populate_panel_playlists(self.cache_data.get_playlists())
+
     def run(self):
         self.view.show()
-
-

@@ -1,72 +1,188 @@
-from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QScrollArea)
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
+                               QScrollArea, QStackedWidget)
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QFont
 import qtawesome as qta
-
 
 class YouTubePanel(QWidget):
     """Painel lateral com lista de músicas"""
     def __init__(self):
         super().__init__()
         self.setStyleSheet("background-color: #000000;")
-        
+
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-        
-        # Header do painel com ícone
-        header_container = QWidget()
-        header_container.setStyleSheet("background-color: #000000; padding: 12px;")
-        header_layout = QHBoxLayout(header_container)
-        header_layout.setContentsMargins(12, 12, 12, 12)
-        
-        library_icon = QLabel()
-        library_icon.setPixmap(qta.icon('fa5s.book', color='#1DB954').pixmap(QSize(16, 16)))
-        
-        header_text = QLabel("Youtube")
-        header_text.setFont(QFont("Segoe UI", 12, QFont.Bold))
-        header_text.setStyleSheet("color: #ffffff;")
-        
-        header_layout.addWidget(library_icon)
-        header_layout.addWidget(header_text)
-        header_layout.addStretch()
-        
-        # Área scrollável
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setStyleSheet("""
-            QScrollArea {
+
+        # ── Barra de abas ──────────────────────────────────────────────────────
+        tabs_container = QWidget()
+        tabs_container.setStyleSheet("background-color: #000000; border-bottom: 1px solid #282828;")
+        tabs_layout = QHBoxLayout(tabs_container)
+        tabs_layout.setContentsMargins(8, 8, 8, 0)
+        tabs_layout.setSpacing(4)
+
+        self.btn_tab_playlists = QPushButton("  Playlists")
+        self.btn_tab_playlists.setIcon(qta.icon('fa5s.list', color="#ffffff"))
+        self.btn_tab_playlists.setIconSize(QSize(13, 13))
+        self.btn_tab_playlists.setFont(QFont("Segoe UI", 9, QFont.Bold))
+        self.btn_tab_playlists.setCursor(Qt.PointingHandCursor)
+        self.btn_tab_playlists.setStyleSheet("""
+            QPushButton {
+                color: #ffffff;
+                background-color: #1a1a1a;
                 border: none;
-                background-color: #000000;
+                border-bottom: 2px solid #1DB954;
+                border-radius: 0px;
+                padding: 8px 14px;
             }
-            QScrollBar:vertical {
-                background-color: #000000;
-                width: 12px;
-                border-radius: 6px;
-            }
-            QScrollBar::handle:vertical {
-                background-color: #404040;
-                border-radius: 6px;
-                min-height: 30px;
-            }
-            QScrollBar::handle:vertical:hover {
-                background-color: #535353;
-            }
+            QPushButton:hover { background-color: #1a1a1a; }
         """)
-        
-        # Container das músicas
-        music_container = QWidget()
-        self.music_layout = QVBoxLayout()
+
+        self.btn_tab_songs = QPushButton("  Músicas")
+        self.btn_tab_songs.setIcon(qta.icon('fa5s.music', color="#b3b3b3"))
+        self.btn_tab_songs.setIconSize(QSize(13, 13))
+        self.btn_tab_songs.setFont(QFont("Segoe UI", 9, QFont.Bold))
+        self.btn_tab_songs.setCursor(Qt.PointingHandCursor)
+        self.btn_tab_songs.setStyleSheet("""
+            QPushButton {
+                color: #b3b3b3;
+                background-color: transparent;
+                border: none;
+                border-bottom: 2px solid transparent;
+                border-radius: 0px;
+                padding: 8px 14px;
+            }
+            QPushButton:hover { color: #ffffff; background-color: #1a1a1a; }
+        """)
+
+        tabs_layout.addWidget(self.btn_tab_playlists)
+        tabs_layout.addWidget(self.btn_tab_songs)
+        tabs_layout.addStretch()
+
+        self.btn_new_playlist = QPushButton()
+        self.btn_new_playlist.setIcon(qta.icon('fa5s.plus', color="#b3b3b3"))
+        self.btn_new_playlist.setIconSize(QSize(13, 13))
+        self.btn_new_playlist.setCursor(Qt.PointingHandCursor)
+        self.btn_new_playlist.setToolTip("Nova Playlist")
+        self.btn_new_playlist.setStyleSheet("""
+            QPushButton {
+                background-color: transparent;
+                border: none;
+                border-radius: 4px;
+                padding: 6px 8px;
+            }
+            QPushButton:hover { background-color: #1a1a1a; }
+            QPushButton:pressed { background-color: #282828; }
+        """)
+        tabs_layout.addWidget(self.btn_new_playlist)
+
+        self.btn_reload = QPushButton()
+        self.btn_reload.setIcon(qta.icon('fa5s.sync-alt', color="#b3b3b3"))
+        self.btn_reload.setIconSize(QSize(13, 13))
+        self.btn_reload.setCursor(Qt.PointingHandCursor)
+        self.btn_reload.setToolTip("Recarregar")
+        self.btn_reload.setStyleSheet("""
+            QPushButton {
+                background-color: transparent;
+                border: none;
+                border-radius: 4px;
+                padding: 6px 8px;
+            }
+            QPushButton:hover { background-color: #1a1a1a; }
+            QPushButton:pressed { background-color: #282828; }
+        """)
+        tabs_layout.addWidget(self.btn_reload)
+
+        # ── Stack de conteúdo ──────────────────────────────────────────────────
+        self.stack = QStackedWidget()
+        self.stack.setStyleSheet("background-color: #000000;")
+
+        # Página 0 – Playlists
+        playlists_page = QWidget()
+        pl_layout = QVBoxLayout(playlists_page)
+        pl_layout.setContentsMargins(0, 0, 0, 0)
+
+        pl_scroll = QScrollArea()
+        pl_scroll.setWidgetResizable(True)
+        pl_scroll.setStyleSheet("""
+            QScrollArea { border: none; background-color: #000000; }
+            QScrollBar:vertical { background-color: #000000; width: 12px; border-radius: 6px; }
+            QScrollBar::handle:vertical { background-color: #404040; border-radius: 6px; min-height: 30px; }
+            QScrollBar::handle:vertical:hover { background-color: #535353; }
+        """)
+
+        self.playlist_container = QWidget()
+        self.playlist_layout = QVBoxLayout(self.playlist_container)
+        self.playlist_layout.setContentsMargins(8, 8, 8, 8)
+        self.playlist_layout.setAlignment(Qt.AlignTop)
+        pl_scroll.setWidget(self.playlist_container)
+        pl_layout.addWidget(pl_scroll)
+
+        # Página 1 – Músicas
+        songs_page = QWidget()
+        songs_layout = QVBoxLayout(songs_page)
+        songs_layout.setContentsMargins(0, 0, 0, 0)
+
+        self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setStyleSheet("""
+            QScrollArea { border: none; background-color: #000000; }
+            QScrollBar:vertical { background-color: #000000; width: 12px; border-radius: 6px; }
+            QScrollBar::handle:vertical { background-color: #404040; border-radius: 6px; min-height: 30px; }
+            QScrollBar::handle:vertical:hover { background-color: #535353; }
+        """)
+
+        self.music_container = QWidget()
+        self.music_layout = QVBoxLayout(self.music_container)
         self.music_layout.setContentsMargins(8, 8, 8, 8)
         self.music_layout.setAlignment(Qt.AlignTop)
-        
-        # Adicionar músicas exemplo
+        self.scroll.setWidget(self.music_container)
+        songs_layout.addWidget(self.scroll)
 
-        
-        music_container.setLayout(self.music_layout)
-        scroll.setWidget(music_container)
-        
-        layout.addWidget(header_container)
-        layout.addWidget(scroll)
-        
+        self.stack.addWidget(playlists_page)  # índice 0
+        self.stack.addWidget(songs_page)       # índice 1
+
+        # ── Rodapé – músicas locais ────────────────────────────────────────────
+        local_music_container = QWidget()
+        local_music_container.setStyleSheet("""
+            QWidget {
+                background-color: #181818;
+                border-top: 1px solid #282828;
+            }
+        """)
+        local_layout = QVBoxLayout(local_music_container)
+        local_layout.setContentsMargins(12, 12, 12, 12)
+        local_layout.setSpacing(8)
+
+        self.path_label = QLabel("Nenhuma pasta selecionada")
+        self.path_label.setFont(QFont("Segoe UI", 9))
+        self.path_label.setStyleSheet("QLabel { color: #b3b3b3; background-color: transparent; padding: 4px; }")
+        self.path_label.setWordWrap(True)
+
+        self.button_local = QPushButton()
+        self.button_local.setText("  Selecionar Músicas Locais")
+        self.button_local.setIcon(qta.icon('fa5s.folder-open', color="#FFFFFF"))
+        self.button_local.setIconSize(QSize(16, 16))
+        self.button_local.setFont(QFont("Segoe UI", 10, QFont.Bold))
+        self.button_local.setCursor(Qt.PointingHandCursor)
+        self.button_local.setStyleSheet("""
+            QPushButton {
+                background-color: #1DB954;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 20px;
+                text-align: center;
+            }
+            QPushButton:hover { background-color: #1ed760; }
+            QPushButton:pressed { background-color: #169c46; }
+        """)
+
+        local_layout.addWidget(self.button_local)
+        local_layout.addWidget(self.path_label)
+
+        # ── Montagem final ─────────────────────────────────────────────────────
+        layout.addWidget(tabs_container)
+        layout.addWidget(self.stack)
+        layout.addWidget(local_music_container)
         self.setLayout(layout)

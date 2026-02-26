@@ -6,7 +6,6 @@ class PanelController:
         self.search_bar = search_bar
         self.stacked_panel = stacked_panel
         self.library_controller = library_controller
-        self.change_panel(0)
         self._connect_signals()
     
     def _connect_signals(self):
