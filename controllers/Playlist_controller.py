@@ -53,3 +53,8 @@ class Playlist(QObject):
             widget = item.widget()
             if widget is not None:
                 widget.deleteLater()
+    
+    def populate_playlist_new_modal(self):
+        musics = self.cache_data.get_music_list()
+        for music in musics:
+            self.playlist_dialog_create.songs_layout.addWidget()
