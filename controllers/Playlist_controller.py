@@ -4,16 +4,24 @@ from models.playlist import Playlist
 
 
 class Playlist(QObject):
-    def __init__(self, cache_data, local_panel):
+    def __init__(self, cache_data, local_panel, playlist_dialog_create):
         super().__init__()
         self.cache_data = cache_data
         self.local_panel = local_panel
+        self.playlist_dialog_create = playlist_dialog_create
         self.current_playlist = None
         self._connect_signals()
 
     def _connect_signals(self):
         self.local_panel
-
+        self.local_panel.btn_new_playlist.clicked.connect(self._open_new_playlist)
+        
+    def _open_new_playlist(self):
+        self.playlist_dialog_create.btn_cancel.clicked.connect(self.playlist_dialog_create.reject)
+        self.playlist_dialog_create.btn_close.clicked.connect(self.playlist_dialog_create.reject)
+        self.playlist_dialog_create.btn_create.clicked.connect(self.playlist_dialog_create.accept)
+        self.playlist_dialog_create.exec()
+    
     def create_playlist(self, name):
         playlist = Playlist(name)
         self.playlists.append(playlist)

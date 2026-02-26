@@ -23,7 +23,9 @@ class MainController():
         # playlist controller 
         self.playlist_controller = Playlist(
             self.cache_data,
-            self.view.library_panel)
+            self.view.library_panel,
+            self.view.playlist_dialog_create
+            )
 
         # library controller / passando player no final
         self.library_controller = LibraryController(
