@@ -17,6 +17,7 @@ class Playlist(QObject):
         self.local_panel.btn_new_playlist.clicked.connect(self._open_new_playlist)
         
     def _open_new_playlist(self):
+        self.populate_playlist_new_modal_with_musics()
         self.playlist_dialog_create.btn_cancel.clicked.connect(self.playlist_dialog_create.reject)
         self.playlist_dialog_create.btn_close.clicked.connect(self.playlist_dialog_create.reject)
         self.playlist_dialog_create.btn_create.clicked.connect(self.playlist_dialog_create.accept)
@@ -54,7 +55,11 @@ class Playlist(QObject):
             if widget is not None:
                 widget.deleteLater()
     
-    def populate_playlist_new_modal(self):
-        musics = self.cache_data.get_music_list()
+    def populate_playlist_new_modal_with_musics(self):
+        print("populando a lista")
+        musics = self.cache_data.get_cards()
+        print("passou do get")
         for music in musics:
-            self.playlist_dialog_create.songs_layout.addWidget()
+            print("entrou no for")
+            print(music)
+            self.playlist_dialog_create.songs_layout.addWidget(music)

@@ -23,6 +23,7 @@ class LibraryController:
     def load_musics(self, musics):
         self.clear_layout_and_cards()
         musics = musics
+        cards = []
         for index, music in enumerate(musics):
             music.position = index
             card = MusicCard(
@@ -36,6 +37,9 @@ class LibraryController:
             card.clicked.connect(self.player.handle_music_selected)
             self.local_panel.music_layout.addWidget(card)
             self.cards.append(card)
+        self.cards = cards
+        self.cache_data.set_cards(cards)
+            
 
                 
 
