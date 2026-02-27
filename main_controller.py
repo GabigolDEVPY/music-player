@@ -48,15 +48,15 @@ class MainController():
         self.library_controller.select_card_by_position
         )
         
-        
+        #reload data
         self.cache_data.reload_data.connect(self.call_functions_reload_data)
     
-
+        #reload data emit
         self.cache_data.reload_data.emit(self.cache_data.get_local_path())
         
 
     def call_functions_reload_data(self):
-        self.library_controller.load_musics(self.cache_data.get_music_list())
+        self.library_controller.populate_musics_panel(self.cache_data.get_music_list())
         self.player_controller.set_playlist(self.cache_data.get_music_list())
         self.playlist_controller.populate_panel_playlists(self.cache_data.get_playlists())
 

@@ -20,7 +20,7 @@ class LibraryController:
         self.local_panel.btn_reload.clicked.connect(self.reload_data)
 
 
-    def load_musics(self, musics):
+    def populate_musics_panel(self, musics):
         self.clear_layout_and_cards()
         musics = musics
         cards = []
@@ -34,10 +34,10 @@ class LibraryController:
                         music.icon,
                         music.position
                     )
+            cards.append(card)
             card.clicked.connect(self.player.handle_music_selected)
-            self.local_panel.music_layout.addWidget(card)
             self.cards.append(card)
-        self.cards = cards
+            self.local_panel.music_layout.addWidget(card)
         self.cache_data.set_cards(cards)
             
 

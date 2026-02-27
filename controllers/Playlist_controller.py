@@ -1,6 +1,7 @@
 from PySide6.QtCore import QObject
 from components.playlist_card import PlaylistCard
 from models.playlist import Playlist
+from components.playlist_cards_musics import MusicCard
 
 
 class Playlist(QObject):
@@ -56,10 +57,15 @@ class Playlist(QObject):
                 widget.deleteLater()
     
     def populate_playlist_new_modal_with_musics(self):
-        print("populando a lista")
-        musics = self.cache_data.get_cards()
-        print("passou do get")
-        for music in musics:
-            print("entrou no for")
-            print(music)
-            self.playlist_dialog_create.songs_layout.addWidget(music)
+        musics = self.cache_data.get_music_list()
+        for index, music in enumerate(musics):
+            music.position = index
+            card = MusicCard(
+                        music.title,
+                        music.artist,
+                        music.duration,
+                        music.path,
+                        music.icon,
+                        music.position
+                    )
+            self.playlist_dialog_create.songs_layout.addWidget(card)
