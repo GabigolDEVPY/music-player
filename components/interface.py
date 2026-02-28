@@ -4,7 +4,7 @@ from components.search_bar import SearchBar
 from components.local_panel import SidePanel
 from PySide6.QtWidgets import QStackedWidget
 from components.youtube_panel import YouTubePanel
-from components.playlist_create import NewPlaylistDialog
+from components.playlist.playlist_create import NewPlaylistDialog
 
 class SpotifyInterface(QMainWindow):
     """Janela principal"""

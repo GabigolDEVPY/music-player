@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject
-from components.playlist_card import PlaylistCard
+from components.playlist.playlist_card import PlaylistCard
 from models.playlist import Playlist
-from components.playlist_cards_musics import MusicCard
+from components.playlist.playlist_cards_musics import MusicCard
 
 
 class PlaylistController(QObject):
