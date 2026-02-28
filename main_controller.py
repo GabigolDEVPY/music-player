@@ -2,7 +2,8 @@ from components.interface import SpotifyInterface
 from controllers.Panel_controller import PanelController
 from controllers.Player_controller import PlayerController
 from controllers.Library_controller import LibraryController
-from controllers.Playlist_controller import Playlist
+from controllers.Playlist_controller import PlaylistController
+from services.playlist_service import PlaylistService
 from models.cache_data import CacheData
 
 
@@ -14,6 +15,9 @@ class MainController():
         #cache data
         self.cache_data = CacheData()
 
+        #services
+        self.playlist_service = PlaylistService(self.cache_data)
+        
         # player controller with signals 
         self.player_controller = PlayerController(
             self.view.player,
@@ -21,10 +25,10 @@ class MainController():
         )
 
         # playlist controller 
-        self.playlist_controller = Playlist(
-            self.cache_data,
+        self.playlist_controller = PlaylistController(
             self.view.library_panel,
-            self.view.playlist_dialog_create
+            self.view.playlist_dialog_create,
+            self.playlist_service
             )
 
         # library controller / passando player no final

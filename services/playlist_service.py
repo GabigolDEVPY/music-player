@@ -1,8 +1,8 @@
 from models.playlist import Playlist
-from models.music import Music
 
 class PlaylistService:
-    @staticmethod
+    def __init__(self, cache_data):
+        self.cache_data = cache_data
     def get_playlists():
         playlists = []
         playlists_dicts = [{    
@@ -22,4 +22,6 @@ class PlaylistService:
             playlists.append(playlist)
         return playlists
     
-        
+    def get_musics(self):
+        musics = self.cache_data.get_music_list()
+        return musics

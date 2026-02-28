@@ -4,10 +4,10 @@ from models.playlist import Playlist
 from components.playlist_cards_musics import MusicCard
 
 
-class Playlist(QObject):
-    def __init__(self, cache_data, local_panel, playlist_dialog_create):
+class PlaylistController(QObject):
+    def __init__(self, local_panel, playlist_dialog_create, playlist_service):
         super().__init__()
-        self.cache_data = cache_data
+        self.playlist_service = playlist_service
         self.local_panel = local_panel
         self.playlist_dialog_create = playlist_dialog_create
         self.current_playlist = None
@@ -57,7 +57,7 @@ class Playlist(QObject):
                 widget.deleteLater()
     
     def populate_playlist_new_modal_with_musics(self):
-        musics = self.cache_data.get_music_list()
+        musics = self.playlist_service.get_musics()
         for index, music in enumerate(musics):
             music.position = index
             card = MusicCard(
