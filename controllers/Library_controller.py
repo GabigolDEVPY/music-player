@@ -5,24 +5,27 @@ from services.storage_service import StorageService
 
 
 class LibraryController:
-    def __init__(self, local_panel, youtube_panel, player_control, cache_data):
+    def __init__(self, local_panel, player_control, library_service):
         self.local_panel = local_panel # mesmo que library panel
-        self.youtube_panel = youtube_panel
         self.player = player_control
-        self.cache_data = cache_data
+        self.library_service = library_service
         self.cards = []
-
+        
+        # call functions
         self._connect_signals()
-        self.local_panel.path_label.setText(str(self.cache_data.local_path))
-    
+        
     def _connect_signals(self):
         self.local_panel.button_local.clicked.connect(self.change_local_path)
         self.local_panel.btn_reload.clicked.connect(self.reload_data)
+        
+        
+    def set_label_path_text(self, path):
+        self.local_panel.path_label.setText(str(path))
+    
 
-
-    def populate_musics_panel(self, musics):
+    def populate_musics_panel(self):
         self.clear_layout_and_cards()
-        musics = musics
+        musics = self.library_service.get_musics()
         cards = []
         for index, music in enumerate(musics):
             music.position = index
@@ -38,18 +41,14 @@ class LibraryController:
             card.clicked.connect(self.player.handle_music_selected)
             self.cards.append(card)
             self.local_panel.music_layout.addWidget(card)
-        self.cache_data.set_cards(cards)
             
-
-                
 
     def change_local_path(self):
         path = QFileDialog.getExistingDirectory(self.local_panel, "Select paste")
         if path:
-            self.path_folder_musics = Path(path)
             StorageService.save_path_musics(path)
-            self.local_panel.path_label.setText(str(self.cache_data.local_path))
-            self.cache_data.set_local_path(path)
+            self.set_label_path_text(path)
+            self.library_service.set_local_path_musics(path)
             
     def reload_data(self):
         self.cache_data.init_data()

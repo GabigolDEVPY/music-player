@@ -4,6 +4,7 @@ from controllers.Player_controller import PlayerController
 from controllers.Library_controller import LibraryController
 from controllers.Playlist_controller import PlaylistController
 from services.playlist_service import PlaylistService
+from services.library_service import LibraryService
 from models.cache_data import CacheData
 
 
@@ -17,6 +18,7 @@ class MainController():
 
         #services
         self.playlist_service = PlaylistService(self.cache_data)
+        self.library_service = LibraryService(self.cache_data)
         
         # player controller with signals 
         self.player_controller = PlayerController(
@@ -34,9 +36,8 @@ class MainController():
         # library controller / passando player no final
         self.library_controller = LibraryController(
             self.view.library_panel, 
-            self.view.youtube_panel, 
             self.player_controller,
-            self.cache_data
+            self.library_service
             )
 
 
@@ -60,7 +61,7 @@ class MainController():
         
 
     def call_functions_reload_data(self):
-        self.library_controller.populate_musics_panel(self.cache_data.get_music_list())
+        self.library_controller.populate_musics_panel()
         self.player_controller.set_playlist(self.cache_data.get_music_list())
         self.playlist_controller.populate_panel_playlists(self.cache_data.get_playlists())
 

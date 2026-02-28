@@ -1,62 +1,10 @@
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QLineEdit, QScrollArea, QWidget, QFrame, QCheckBox
+    QLineEdit, QScrollArea, QWidget, QFrame,
 )
 from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QFont, QPixmap, QIcon
+from PySide6.QtGui import QFont
 import qtawesome as qta
-
-
-class SongItem(QWidget):
-    """Linha de música com checkbox."""
-
-    def __init__(self):
-        self.setFixedHeight(46)
-        self.setCursor(Qt.PointingHandCursor)
-        self.setStyleSheet("""
-            SongItem { background-color: transparent; border-radius: 6px; }
-            SongItem:hover { background-color: #1a1a1a; }
-        """)
-
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(10, 0, 10, 0)
-        layout.setSpacing(12)
-
-        # Ícone
-        icon_lbl = QLabel()
-        icon_lbl.setPixmap(qta.icon("fa5s.music", color="#535353").pixmap(12, 12))
-        icon_lbl.setFixedSize(18, 18)
-        icon_lbl.setAlignment(Qt.AlignCenter)
-        icon_lbl.setStyleSheet("background: transparent;")
-
-        # Nome
-        name_lbl = QLabel("musicas")
-        name_lbl.setFont(QFont("Segoe UI", 9))
-        name_lbl.setStyleSheet("color: #b3b3b3; background: transparent;")
-
-        # Checkbox
-        self.checkbox = QCheckBox()
-        self.checkbox.setStyleSheet("""
-            QCheckBox { background: transparent; }
-            QCheckBox::indicator {
-                width: 17px; height: 17px;
-                border-radius: 4px;
-                border: 2px solid #404040;
-                background: transparent;
-            }
-            QCheckBox::indicator:hover  { border-color: #1DB954; }
-            QCheckBox::indicator:checked {
-                background-color: #1DB954;
-                border-color:     #1DB954;
-            }
-        """)
-
-        layout.addWidget(icon_lbl)
-        layout.addWidget(name_lbl, 1)
-        layout.addWidget(self.checkbox)
-
-        # Clicar na linha inteira alterna o checkbox
-        self.mousePressEvent = lambda _: self.checkbox.toggle()
 
 
 class NewPlaylistDialog(QDialog):
