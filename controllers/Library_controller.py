@@ -10,7 +10,7 @@ class LibraryController:
         self.player = player_control
         self.library_service = library_service
         self.cards = []
-        
+
         # call functions
         self._connect_signals()
         
@@ -19,7 +19,8 @@ class LibraryController:
         self.local_panel.btn_reload.clicked.connect(self.reload_data)
         
         
-    def set_label_path_text(self, path):
+    def set_label_path_text(self):
+        path = self.library_service.get_local_musics_path()
         self.local_panel.path_label.setText(str(path))
     
 
@@ -47,11 +48,12 @@ class LibraryController:
         path = QFileDialog.getExistingDirectory(self.local_panel, "Select paste")
         if path:
             StorageService.save_path_musics(path)
-            self.set_label_path_text(path)
+            self.local_panel.path_label.setText(str(path))
             self.library_service.set_local_path_musics(path)
+            self.reload_data()
             
     def reload_data(self):
-        self.cache_data.init_data()
+        self.library_service.reload_data()
 
     def clear_layout_and_cards(self):
         self.cards.clear()

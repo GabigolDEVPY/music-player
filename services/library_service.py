@@ -14,3 +14,6 @@ class LibraryService:
     def set_local_path_musics(self, path):
         self.cache_data.set_local_path(path)
         
+    def reload_data(self):
+        print("reload em tudo")
+        self.cache_data.init_data()

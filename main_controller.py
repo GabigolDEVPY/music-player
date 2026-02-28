@@ -57,11 +57,13 @@ class MainController():
         self.cache_data.reload_data.connect(self.call_functions_reload_data)
     
         #reload data emit
-        self.cache_data.reload_data.emit(self.cache_data.get_local_path())
+        self.cache_data.init_data()
         
 
-    def call_functions_reload_data(self):
+    def call_functions_reload_data(self, path):
+        print("chamando calls")
         self.library_controller.populate_musics_panel()
+        self.library_controller.set_label_path_text()
         self.player_controller.set_playlist(self.cache_data.get_music_list())
         self.playlist_controller.populate_panel_playlists(self.cache_data.get_playlists())
 
