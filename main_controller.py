@@ -61,7 +61,6 @@ class MainController():
         
 
     def call_functions_reload_data(self, path):
-        print("chamando calls")
         self.library_controller.populate_musics_panel()
         self.library_controller.set_label_path_text()
         self.player_controller.set_playlist(self.cache_data.get_music_list())
