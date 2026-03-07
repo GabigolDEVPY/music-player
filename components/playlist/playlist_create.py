@@ -10,10 +10,8 @@ import qtawesome as qta
 class NewPlaylistDialog(QDialog):
     """Dialog de criação de playlist — apenas interface."""
 
-    def __init__(self, available_songs: list[str] | None = None, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.available_songs = available_songs or []
-
         self.setWindowTitle("Nova Playlist")
         self.setModal(True)
         self.setFixedSize(500, 620)
@@ -119,7 +117,32 @@ class NewPlaylistDialog(QDialog):
         self.input_name.setPlaceholderText("Ex: Chill vibes...")
         self.input_name.setFont(QFont("Segoe UI", 10))
         self.input_name.setFixedHeight(40)
+        self.input_name.setMaxLength(40)
         self.input_name.setStyleSheet("""
+            QLineEdit {
+                background-color: #282828;
+                color: #ffffff;
+                border: 1px solid #404040;
+                border-radius: 8px;
+                padding: 0 12px;
+            }
+            QLineEdit:focus {
+                border-color: #1DB954;
+                background-color: #1f1f1f;
+            }
+            QLineEdit::placeholder { color: #535353; }
+        """)
+
+        lbl_desc = QLabel("Descrição")
+        lbl_desc.setFont(QFont("Segoe UI", 8))
+        lbl_desc.setStyleSheet("color: #535353; background: transparent;")
+
+        self.input_desc = QLineEdit()
+        self.input_desc.setPlaceholderText("Ex: Para relaxar...")
+        self.input_desc.setFont(QFont("Segoe UI", 10))
+        self.input_desc.setFixedHeight(40)
+        self.input_desc.setMaxLength(50)
+        self.input_desc.setStyleSheet("""
             QLineEdit {
                 background-color: #282828;
                 color: #ffffff;
@@ -136,6 +159,8 @@ class NewPlaylistDialog(QDialog):
 
         col.addWidget(lbl)
         col.addWidget(self.input_name)
+        col.addWidget(lbl_desc)
+        col.addWidget(self.input_desc)
         col.addStretch()
 
         row.addWidget(self.btn_cover)
@@ -205,17 +230,6 @@ class NewPlaylistDialog(QDialog):
         self.songs_layout.setContentsMargins(0, 2, 0, 2)
         self.songs_layout.setSpacing(1)
         self.songs_layout.setAlignment(Qt.AlignTop)
-
-        # Popula com as músicas recebidas
-        if self.available_songs:
-            for song in self.available_songs:
-                self.songs_layout.addWidget(SongItem(song))
-        else:
-            empty = QLabel("Nenhuma música encontrada")
-            empty.setAlignment(Qt.AlignCenter)
-            empty.setFont(QFont("Segoe UI", 9))
-            empty.setStyleSheet("color: #404040; padding: 28px;")
-            self.songs_layout.addWidget(empty)
 
         scroll.setWidget(self.songs_container)
         return scroll

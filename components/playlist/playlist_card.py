@@ -10,7 +10,7 @@ class PlaylistCard(QFrame):
     """Card individual de playlist no painel lateral"""
     clicked = Signal(object)
 
-    def __init__(self, title, description, music_count, playlist_id):
+    def __init__(self, title, description, music_count, playlist_id, cover_path):
         super().__init__()
         self.setFocusPolicy(Qt.StrongFocus)
         self.setFixedHeight(90)
@@ -35,7 +35,8 @@ class PlaylistCard(QFrame):
             title=title,
             description=description,
             music_count=music_count,
-            playlist_id=playlist_id
+            playlist_id=playlist_id,
+            cover_path=cover_path
         )
 
         layout = QHBoxLayout()

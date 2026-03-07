@@ -12,7 +12,7 @@ class CacheData(QObject):
         super().__init__()
         self.playlists = PlaylistService.get_playlists()
         self.local_path = StorageService.load_path_musics()
-        self.songs = MusicService.load_folder_musics(self.local_path)
+        self.songs = []
         
     def get_playlists(self):
         return self.playlists
@@ -34,10 +34,12 @@ class CacheData(QObject):
         self.songs = songs
         
     def init_data(self):
-        songs = MusicService.load_folder_musics(self.local_path)
-        playlists = PlaylistService.get_playlists()
+        if self.local_path:
+            print("como entrou no if ???")
+            songs = MusicService.load_folder_musics(self.local_path)
+            playlists = PlaylistService.get_playlists()
 
-        self.set_songs(songs)
-        self.set_playlists(playlists)
-        
-        self.reload_data.emit(self.local_path)
+            self.set_songs(songs)
+            self.set_playlists(playlists)
+            
+            self.reload_data.emit(self.local_path)

@@ -6,7 +6,7 @@ class Playlist:
     description: str
     music_count: str
     playlist_id: str
+    cover_path: str
     # musics: list[Music]
-
 
     

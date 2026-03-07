@@ -1,7 +1,12 @@
 from PySide6.QtCore import QObject
 from components.playlist.playlist_card import PlaylistCard
 from models.playlist import Playlist
+from PySide6.QtWidgets import QFileDialog
 from components.playlist.playlist_cards_musics import MusicCard
+from PySide6.QtGui import QPixmap, QIcon
+from PySide6.QtCore import Qt, QSize, QRect
+from styles.set_cover_playlist import set_default_cover, set_cover_photo
+
 
 
 class PlaylistController(QObject):
@@ -16,6 +21,8 @@ class PlaylistController(QObject):
     def _connect_signals(self):
         self.local_panel
         self.local_panel.btn_new_playlist.clicked.connect(self._open_new_playlist)
+        self.playlist_dialog_create.btn_cover.clicked.connect(self.select_cover_photo)
+        self.playlist_dialog_create.btn_create.clicked.connect(self.create_playlist)
         
     def _open_new_playlist(self):
         self.populate_playlist_new_modal_with_musics()
@@ -27,7 +34,18 @@ class PlaylistController(QObject):
     def create_playlist(self, name):
         playlist = Playlist(name)
         self.playlists.append(playlist)
-    
+        
+
+
+    def select_cover_photo(self):
+        path, _ = QFileDialog.getOpenFileName(self.local_panel,"Select cover photo","","Images (*.png *.jpg *.jpeg *.webp)")
+        if not path:
+            return
+        
+        self.playlist_service.select_cover_photo(path)
+        btn = self.playlist_dialog_create.btn_cover
+        set_cover_photo(btn, path)
+
 
     def delete_music_playlist(self, position):
         for music in self.current_playlist.musics:
@@ -45,7 +63,8 @@ class PlaylistController(QObject):
                 title=playlist.title,
                 description=playlist.description,
                 music_count=playlist.music_count,
-                playlist_id=playlist.playlist_id
+                playlist_id=playlist.playlist_id,
+                cover_path=playlist.cover_path
             )
             self.local_panel.playlist_layout.addWidget(card)
             
@@ -55,8 +74,16 @@ class PlaylistController(QObject):
             widget = item.widget()
             if widget is not None:
                 widget.deleteLater()
+                
+    def clear_layout_musics(self):
+        while self.playlist_dialog_create.songs_layout.count():
+            item = self.playlist_dialog_create.songs_layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
     
     def populate_playlist_new_modal_with_musics(self):
+        self.clear_layout_musics()
         musics = self.playlist_service.get_musics()
         for index, music in enumerate(musics):
             music.position = index
@@ -69,3 +96,28 @@ class PlaylistController(QObject):
                         music.position
                     )
             self.playlist_dialog_create.songs_layout.addWidget(card)
+    
+
+    def get_selected_musics(self):
+        selected = []
+
+        for i in range(self.playlist_dialog_create.songs_layout.count()):
+            item = self.playlist_dialog_create.songs_layout.itemAt(i)
+            widget = item.widget()
+
+            if widget and hasattr(widget, "checkbox"):
+                if widget.checkbox.isChecked():
+                    selected.append(widget.music_data)
+
+        return selected
+    
+    def create_playlist(self):
+        musics_selected = self.get_selected_musics()
+        playlist_name = self.playlist_dialog_create.input_name.text()
+        playlist_desc = self.playlist_dialog_create.input_desc.text()
+        self.playlist_service.create_playlist(playlist_name, playlist_desc, musics_selected)
+
+        # set default atributes styles
+        self.playlist_dialog_create.input_name.clear()
+        self.playlist_dialog_create.input_desc.clear()
+        set_default_cover(self.playlist_dialog_create.btn_cover)
