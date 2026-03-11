@@ -9,12 +9,16 @@ from models.music import Music
 
 class MusicService:
     @staticmethod
-    def load_folder_musics(path):
+    def load_folder_musics(json):
         musics = []
-        for file in Path(path).glob("*.mp3"):
-            audio = MP3(path / file)
-            tags = EasyID3(path / file)
-            id3 = ID3(path / file)
+
+        base_path = Path(json["path"])
+
+        for file in base_path.glob("*.mp3"):
+
+            audio = MP3(file)
+            tags = EasyID3(file)
+            id3 = ID3(file)
 
             length = int(audio.info.length)
             duration = f"{length // 60:02}:{length % 60:02}"
@@ -29,16 +33,18 @@ class MusicService:
 
             if cover_data:
                 pixmap = QPixmap()
-                pixmap.loadFromData(cover_data)    
+                pixmap.loadFromData(cover_data)
 
             music = Music(
                 position=None,
                 title=tags.get("title", ["Sem titulo"])[0],
                 artist=tags.get("artist", ["Desconhecido"])[0],
                 duration=duration,
-                path=path / file,
+                path=file,
                 icon=pixmap
-                )
+            )
+
             musics.append(music)
+
         return musics
 

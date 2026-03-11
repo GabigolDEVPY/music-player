@@ -9,8 +9,10 @@ class StorageService:
     def get_config_path():
         if platform_system == "Windows":
             folder = Path.home() / "Documents"
+            print("caminhooooo",folder)
         else:
             folder = Path.home() / "Documentos"
+            print("caminhooooo",folder)
 
         if not folder.exists():
             folder.mkdir(parents=True, exist_ok=True)
@@ -20,10 +22,21 @@ class StorageService:
     def load_path_musics():
         path = StorageService.get_config_path()
         if not path.exists():
-            return None
+            return {"path": ""}
 
         with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
+            print("retornando json")
+            return {"path": json.load(f)}
+        
+    @staticmethod
+    def load_path_musics():
+        path = StorageService.get_config_path()
+        if not path.exists():
+            return {"path": ""}
+
+        with open(path, "r", encoding="utf-8") as f:
+            print("retornando json")
+            return {"path": json.load(f)}
 
 
     @staticmethod

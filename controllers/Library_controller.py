@@ -47,7 +47,10 @@ class LibraryController:
     def change_local_path(self):
         path = QFileDialog.getExistingDirectory(self.local_panel, "Select paste")
         if path:
-            StorageService.save_path_musics(path)
+            json = StorageService.load_path_musics()
+            print("json carregado", json)
+            json["path"] = path
+            StorageService.save_path_musics(json)
             self.local_panel.path_label.setText(str(path))
             self.library_service.set_local_path_musics(path)
             self.reload_data()

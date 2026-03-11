@@ -1,4 +1,5 @@
 from models.playlist import Playlist
+from services.storage_service import StorageService
 from random import randint
 
 class PlaylistService:
@@ -43,7 +44,11 @@ class PlaylistService:
         "playlist_id": randint(10000000, 99999999),
         "cover_path": self.new_playlist_info["cover_path"]
         }
-        pass
+        self.save_playlist_storage(playlist)
 
     def save_playlist_storage(self, playlist):
-        
+        json = StorageService.load_path_musics()
+        json["playlists"] = []
+        json["playlists"].append(playlist)
+        StorageService.save_path_musics(json)
+        pass
