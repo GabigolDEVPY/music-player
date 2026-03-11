@@ -35,8 +35,7 @@ class CacheData(QObject):
         
     def init_data(self):
         if self.local_path:
-            print("como entrou no if ???")
-            songs = MusicService.load_folder_musics(self.local_path)
+            songs = MusicService.load_folder_musics(self.local_path["path"])
             playlists = PlaylistService.get_playlists()
 
             self.set_songs(songs)
