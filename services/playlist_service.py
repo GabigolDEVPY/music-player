@@ -5,7 +5,7 @@ from random import randint
 class PlaylistService:
     def __init__(self, cache_data):
         self.cache_data = cache_data
-        self.new_playlist_info = {}
+        self.new_playlist_info = {"cover_path": None}
         
     def get_playlists():
         playlists = []

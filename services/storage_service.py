@@ -19,28 +19,21 @@ class StorageService:
         return folder / "save.json"
 
     @staticmethod
-    def load_path_musics():
+    def load_json():
         path = StorageService.get_config_path()
         if not path.exists():
+            print("entrou no inexistente")
             return {"path": ""}
 
         with open(path, "r", encoding="utf-8") as f:
             print("retornando json")
-            return {"path": json.load(f)}
+            return json.load(f)
         
-    @staticmethod
-    def load_path_musics():
-        path = StorageService.get_config_path()
-        if not path.exists():
-            return {"path": ""}
 
-        with open(path, "r", encoding="utf-8") as f:
-            print("retornando json")
-            return {"path": json.load(f)}
 
 
     @staticmethod
-    def save_path_musics(data):
+    def save_json(data):
         path = StorageService.get_config_path()
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
